@@ -50,18 +50,6 @@ class Board:
 
         self.board[end_x - 1][end_y - 1].set_as_end_block()
 
-
-        # rows = 0
-        #
-        # while rows < 5:
-        #     self.board.append([])
-        #
-        #     columns = 0
-        #     while columns < 10:
-        #         self.board[rows].append(field.)
-        #         columns += 1
-        #     rows += 1
-
     def get_field_at(self, row, column):
         return self.board[row][column]
 
@@ -105,3 +93,6 @@ class Board:
 
     def get_middle_of_field(self, row, column):
         return (column * self.size_of_one_field + self.size_of_one_field // 2, row * self.size_of_one_field + self.size_of_one_field // 2)
+
+    def get_middle_of_on_field_from_x_y(self, pos):
+        return (pos[0]//self.size_of_one_field*self.size_of_one_field+self.size_of_one_field/2, pos[1]//self.size_of_one_field*self.size_of_one_field+self.size_of_one_field/2)
