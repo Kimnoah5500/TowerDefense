@@ -14,10 +14,10 @@ class Player:
         return self.health_points <= 0
 
 class Bar:
-    bar_height = 40
+    bar_height = 43
     @staticmethod
     def get_height_of_bar():
-        return 40
+        return 43
 
     def __init__(self, player, window, scale):
         self.scale = scale
@@ -29,6 +29,13 @@ class Bar:
         self.hearth_image = pygame.transform.scale(self.hearth_image, (int(scale * 30), int(scale * 30)))
         self.coin_image = pygame.image.load('./ressources/coin.png')
         self.coin_image = pygame.transform.scale(self.coin_image, (int(scale * 30), int(scale * 30)))
+        self.buttons = []
+
+    def get_buttons(self):
+        return self.buttons
+
+    def set_buttons(self, buttons):
+        self.buttons = buttons
 
     def render(self):
         pygame.draw.rect(self.window, (84, 59, 31), pygame.Rect((0, 0), (pygame.display.get_window_size()[0], self.bar_height * self.scale)))
@@ -38,3 +45,5 @@ class Bar:
         self.window.blit(health_points_text, (self.hearth_image.get_rect().width + 10 * self.scale, 0))
         self.window.blit(self.coin_image, (pygame.display.get_window_size()[0] - 5 * self.scale - self.coin_image.get_rect().width, 5 * self.scale))
         self.window.blit(money_text, (pygame.display.get_window_size()[0] - money_text.get_rect().width - 10 * self.scale - self.coin_image.get_rect().width, 0))
+        for a_button in self.buttons:
+            a_button.render()

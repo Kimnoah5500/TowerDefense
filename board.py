@@ -4,12 +4,12 @@ import player
 
 class Board:
 
-    def __init__(self, scale, window):
+    def __init__(self, scale, level_number, window):
         self.size_of_one_field = int(100 * scale)
         self.board = []
         self.window = window
         self.top_offset = player.Bar.get_height_of_bar()
-        file = csv.reader(open('./levels/level_1.csv'), delimiter=';')
+        file = csv.reader(open('./levels/level_' + str(level_number) + '.csv'), delimiter=';')
 
         row_number = 0
         for row in file:

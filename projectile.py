@@ -3,11 +3,11 @@ import math
 import player as Player
 
 class Projectile_manager:
-    projectiles = []
     def __init__(self, enemy_manager, scale, window):
         self.scale = scale
         self.enemy_manager = enemy_manager
         self.window = window
+        self.projectiles = []
 
     def new_projectile(self, code, target_pos, start_pos, target_enemy):
         self.projectiles.append(Canon_ball(target_pos, start_pos, self.scale, target_enemy))
