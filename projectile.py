@@ -22,9 +22,9 @@ class Projectile_manager:
                 projectile.render(self.window)
 
 class Projectile:
-    def __init__(self, target_pos, start_pos, vel, target_enemy, damage, size):
+    def __init__(self, target_pos, start_pos, vel, target_enemy, damage, size, scale):
         self.vel = vel
-        self.size = size
+        self.size = size * scale
         self.target_enemy = target_enemy
         self.damage = damage
         length_x = target_pos[0] - start_pos[0]
@@ -36,7 +36,7 @@ class Projectile:
         self.pos_x = start_pos[0]
         self.pos_y = start_pos[1]
         self.target_pos = target_pos
-        self.top_offset = Player.Bar.get_height_of_bar()
+        self.top_offset = Player.Bar.get_height_of_bar(scale)
 
     def update_pos(self):
         self.pos_x += self.movement_x
@@ -52,6 +52,6 @@ class Canon_ball(Projectile):
     def __init__(self, target_pos, start_pos, scale, target_enemy):
         vel = 20 * scale
         damage = 20
-        Projectile.__init__(self, target_pos, start_pos, vel, target_enemy, damage, int(scale * 10))
+        Projectile.__init__(self, target_pos, start_pos, vel, target_enemy, damage, 10, scale)
         self.image = pygame.image.load('./ressources/Cannon_Ball.png')
         self.image = pygame.transform.scale(self.image, (int(10 * scale), int(10 * scale)))

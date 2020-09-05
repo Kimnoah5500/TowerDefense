@@ -8,7 +8,7 @@ class Board:
         self.size_of_one_field = int(100 * scale)
         self.board = []
         self.window = window
-        self.top_offset = player.Bar.get_height_of_bar()
+        self.top_offset = player.Bar.get_height_of_bar(scale)
         file = csv.reader(open('./levels/level_' + str(level_number) + '.csv'), delimiter=';')
 
         row_number = 0
@@ -99,3 +99,6 @@ class Board:
 
     def get_middle_of_on_field_from_x_y(self, pos):
         return (pos[0]//self.size_of_one_field*self.size_of_one_field+self.size_of_one_field/2, pos[1]//self.size_of_one_field*self.size_of_one_field+self.size_of_one_field/2)
+
+    def get_row_and_column_from_x_y(self, x,y):
+        return int(y//self.size_of_one_field),int(x//self.size_of_one_field)

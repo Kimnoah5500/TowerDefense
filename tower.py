@@ -1,8 +1,6 @@
 import pygame
 
 class TowerManager:
-
-
     def __init__(self, scale, enemy_manager, projectile_manager):
         self.scale = scale
         self.enemy_manager = enemy_manager
@@ -20,7 +18,7 @@ class TowerManager:
             if tower.shot_approved():
                 enemys_in_range = tower.search_for_enemy_in_range()
                 if enemys_in_range:
-                    self.projectile_manager.new_projectile("Test", enemys_in_range[0].get_pos(), tower.get_pos(), enemys_in_range[0])
+                    self.projectile_manager.new_projectile("canbal", enemys_in_range[0].get_pos(), tower.get_pos(), enemys_in_range[0])
                     tower.shot_fired()
 
 class Tower:
