@@ -143,6 +143,13 @@ class Game(object):
 
                 pygame.display.update()
                 for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        run = False
+
+                    elif event.type == pygame.KEYDOWN:
+                        if pygame.key.get_pressed()[pygame.K_ESCAPE]:
+                            run = False
+
                     if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                         pos = event.pos
                         drag, index = self.shop.checkShopClick(pos[0], pos[1])
