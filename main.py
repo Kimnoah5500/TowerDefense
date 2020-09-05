@@ -25,7 +25,6 @@ class Game:
     selected_level = None
 
     def __init__(self):
-        self.time = 0
         self.scale = 1
         self.state = "Menu"
 
@@ -113,7 +112,7 @@ class Game:
                                     self.state = "Start_game"
             elif self.state == "Start_game":
                 self.start_level(self.selected_level)
-                self.time = 0
+                self.clock.tick()
                 test_pos = self.play_board.get_middle_of_field(2, 5)
                 test_pos_2 = self.play_board.get_middle_of_field(2, 2)
                 test_pos_3 = self.play_board.get_middle_of_field(2, 0)
