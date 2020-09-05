@@ -8,11 +8,10 @@ class TowerManager:
         self.towers = []
 
     def add_tower(self, code, row_column, size_of_one_field, top_offset):
-        print(size_of_one_field)
         pos = (row_column[1] * size_of_one_field + size_of_one_field // 2, row_column[0] * size_of_one_field + size_of_one_field // 2 + top_offset)
-        print(row_column)
-        print(pos)
-        new_tower = Basic_tower(self.scale, pos, self.enemy_manager)
+        if code == "bato":
+            new_tower = Basic_tower(self.scale, pos, self.enemy_manager)
+        #TODO Add other Tower Codes here if there are any new
         self.towers.append(new_tower)
         return new_tower
 
@@ -22,7 +21,7 @@ class TowerManager:
             if tower.shot_approved():
                 enemys_in_range = tower.search_for_enemy_in_range()
                 if enemys_in_range:
-                    self.projectile_manager.new_projectile("canbal", enemys_in_range[0].get_pos(), tower.get_pos(), enemys_in_range[0])
+                    self.projectile_manager.new_projectile(tower.projectile_code, enemys_in_range[0].get_pos(), tower.get_pos(), enemys_in_range[0])
                     tower.shot_fired()
 
 class Tower:
@@ -61,6 +60,7 @@ class Basic_tower(Tower):
     def __init__(self, scale, pos, enemy_manager):
         range = 160 * scale
         cooldown = 200
-        Tower.__init__(self, scale, pos, range, enemy_manager, "Test", cooldown)
+        projectile_code = "caba"
+        Tower.__init__(self, scale, pos, range, enemy_manager, projectile_code, cooldown)
         self.image = pygame.image.load('./ressources/Basic_tower.png')
         self.image = pygame.transform.scale(self.image, (int(scale * 60), int(scale * 80)))

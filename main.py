@@ -158,7 +158,7 @@ class Game:
                     elif drag and event.type == pygame.MOUSEBUTTONUP:
                         drag = False
                         row, column = self.play_board.get_row_and_column_from_x_y(event.pos[0], event.pos[1])
-                        self.play_board.add_tower_to_field(self.tower_manager.add_tower("lol", (row, column), self.play_board.get_size_of_one_field(), Player.Bar.get_height_of_bar(self.scale)), row, column)
+                        self.play_board.add_tower_to_field(self.tower_manager.add_tower("bato", (row, column), self.play_board.get_size_of_one_field(), Player.Bar.get_height_of_bar(self.scale)), row, column)
 
             elif self.state == "Game_win":
                 self.window.fill((83, 186, 69))
