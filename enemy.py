@@ -1,15 +1,82 @@
 import pygame
+import player as Player
+from collections import deque
+
+class Wave_manager:
+    def __init__(self, enemy_manager):
+        self.setup_waves()
+        self.endless_mode = False
+        self.enemy_manager = enemy_manager
+        self.time = 0
+        self.time_since_last_spawn = 0
+        self.all_waves_completed = False
+
+    def setup_waves(self):
+        self.first_wave = deque(["ba", "ba", "ba", "ba", "ba", "ba", "ba"])
+        self.second_wave = deque(["ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba"])
+        self.third_wave = deque(
+            ["ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba",
+             "ba", "ba", "ba", "ba"])
+        self.endless_mode_wave = deque(
+            ["ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba"])
+
+    def manage(self, time_difference):
+        self.time_since_last_spawn += time_difference
+        if not self.endless_mode:
+            self.time += time_difference
+            if 20000 > self.time > 10000:
+                if self.first_wave:
+                    if self.time_since_last_spawn > 1000:
+                        self.enemy_manager.new_ememy(self.first_wave.popleft())
+                        self.time_since_last_spawn = 0
+            elif 30000 > self.time > 20000:
+                if self.second_wave:
+                    if self.time_since_last_spawn > 800:
+                        self.enemy_manager.new_ememy(self.second_wave.popleft())
+                        self.time_since_last_spawn = 0
+            elif self.time > 30000:
+                if self.third_wave:
+                    if self.time_since_last_spawn > 400:
+                        self.enemy_manager.new_ememy(self.third_wave.popleft())
+                        self.time_since_last_spawn = 0
+                elif not self.enemy_manager.enemys:
+                    self.all_waves_completed = True
+        else:
+            if self.endless_mode_wave:
+                if self.time_since_last_spawn > 100:
+                    self.enemy_manager.new_ememy(self.endless_mode_wave.popleft())
+                    self.time_since_last_spawn = 0
+            else:
+                self.time_since_last_spawn = -9900
+                self.endless_mode_wave = deque(["ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba"])
+
+    def set_endless_mode(self):
+        self.endless_mode = True
+
+    def get_all_waves_completed(self):
+        if not self.endless_mode:
+            return self.all_waves_completed
+        else:
+            return False
 
 class Enemy_manager:
-    def __init__(self, board, size, window):
+    def __init__(self, board, player, scale, window):
         self.board = board
-        self.size = size
+        self.player = player
+        self.scale = scale
         self.enemys = []
         self.window = window
         self.start_pos = board.get_start_pos()
 
-    def new_ememy(self):
-        self.enemys.append(Ballon(self.size, self.board, self.start_pos))
+    def new_ememy(self, enemy_code):
+        if enemy_code == "ba":
+            self.enemys.append(Ballon(self.scale, self.board, self.start_pos))
+
+    def hit_enemy(self, enemy, damage):
+        if self.enemys.__contains__(enemy):
+            if self.enemys[self.enemys.index(enemy)].hit(damage):
+                self.player.add_money(enemy.get_money_value())
+                self.enemys.remove(enemy)
 
     def manage(self):
         for enemy in self.enemys[:]:
@@ -17,6 +84,7 @@ class Enemy_manager:
             enemy.correct_to_middle()
             enemy.render(self.window)
             if enemy.is_at_end():
+                self.player.reduce_health_points(enemy.get_damage())
                 self.enemys.remove(enemy)
 
     def get_enemys_in_range(self, start_point, end_point):
@@ -30,19 +98,24 @@ class Enemy_manager:
         """
         enemys_in_range = []
         for enemy in self.enemys:
-            if enemy.pos_x > start_point[0] and enemy.pos_x < end_point[0] and enemy.pos_y > start_point[1] and enemy.pos_y < end_point[1]:
+            if enemy.pos_x > start_point[0] and enemy.pos_x < end_point[0] and enemy.pos_y > start_point[
+                1] and enemy.pos_y < end_point[1]:
                 enemys_in_range.append(enemy)
         return enemys_in_range
 
+
 class Enemy:
-    def __init__(self, board, size, start_pos):
+    def __init__(self, board, scale, start_pos, health_points, money_value, damage, vel):
+        self.money_value = money_value
         self.board = board
-        self.size = size
+        self.size = scale * 60
         self.pos_x = start_pos[0]
         self.pos_y = start_pos[1]
-        self.vel = 5
+        self.damage = damage
+        self.vel = vel
         self.last_movement = self.board.get_supposed_start_direction()
-
+        self.health_points = health_points
+        self.top_offset = Player.Bar.get_height_of_bar()
 
     def update_pos(self):
         field_code = self.board.get_field_at_x_y(self.pos_x, self.pos_y).get_field_code()
@@ -204,15 +277,29 @@ class Enemy:
                     return True
         return False
 
+    def hit(self, damage):
+        self.health_points -= damage
+        return self.health_points <= 0
+
+    def get_damage(self):
+        return self.damage
+
+    def get_money_value(self):
+        return self.money_value
+
     def get_pos(self):
         return (self.pos_x, self.pos_y)
 
     def render(self, window):
-        window.blit(self.image, (self.pos_x - self.size // 2, self.pos_y - self.size // 2))
+        window.blit(self.image, (self.pos_x - self.size // 2, self.pos_y - self.size // 2 + self.top_offset))
 
 
 class Ballon(Enemy):
-    def __init__(self, size, board, start_pos):
-        Enemy.__init__(self, board, size, start_pos)
+    def __init__(self, scale, board, start_pos, ):
+        health_points = 100
+        damage = 10
+        vel = 5 * scale
+        money_value = 200
+        Enemy.__init__(self, board, scale, start_pos, health_points, money_value, damage, vel)
         self.image = pygame.image.load('./ressources/Enemy_ballon.png')
-        self.image = pygame.transform.scale(self.image, (size, size))
+        self.image = pygame.transform.scale(self.image, (int(scale * 60), int(scale * 60)))
