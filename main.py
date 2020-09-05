@@ -3,6 +3,7 @@ import board
 import enemy
 import tower
 import projectile
+import shop
 
 pygame.init()
 size_of_one_field = 100
@@ -10,7 +11,7 @@ size_of_enemys = 60
 #pygame.display.Info().current_w
 #pygame.display.Info().current_h
 #pygame.FULLSCREEN
-window = pygame.display.set_mode((size_of_one_field * 10, size_of_one_field * 5), )
+window = pygame.display.set_mode((size_of_one_field * 10, size_of_one_field * 5 + 100), )
 
 pygame.display.set_caption("Test")
 
@@ -36,8 +37,12 @@ test_tower = play_board.add_tower_to_field(tower_manager.add_tower("lol", test_p
 test_tower_2 = play_board.add_tower_to_field(tower_manager.add_tower("lol", test_pos_2), 2, 2)
 test_tower_3 = play_board.add_tower_to_field(tower_manager.add_tower("lol", test_pos_3), 2, 0)
 
+shop = shop.Shop(0, play_board.get_board_height() * size_of_one_field, play_board.get_board_width() * size_of_one_field)
+shop.render(window)
+
 time_since_last_action = 0
 
+drag = False
 run = True
 
 while run:
@@ -62,6 +67,17 @@ while run:
         if event.type == pygame.KEYDOWN:
             if pygame.key.get_pressed()[pygame.K_ESCAPE]:
                 run = False
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            x,y = event.pos
+            drag, index = shop.checkShopClick(x,y)
+
+        if drag and event.type == pygame.MOUSEBUTTONUP:
+            drag = False
+            x,y = play_board.get_middle_of_on_field_from_x_y(event.pos)
+            row, colum = play_board.get_row_and_column_from_x_y(x,y)
+            play_board.add_tower_to_field(tower_manager.add_tower("lol", (x,y)),row, colum )
+
 
     keys = pygame.key.get_pressed()
     mousePos = pygame.mouse.get_pos()
@@ -88,9 +104,14 @@ while run:
     # if keys[pygame.K_DOWN]:
     #     height += vel
     play_board.render(window)
+
     enemy_manager.manage()
     tower_manager.manage(dt)
     projectile_manager.manage()
+    shop.render(window)
+
+    if drag:
+        shop.dragItem(index, mousePos, window)
 
     pygame.display.update()
 

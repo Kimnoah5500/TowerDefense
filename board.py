@@ -96,3 +96,6 @@ class Board:
 
     def get_middle_of_on_field_from_x_y(self, pos):
         return (pos[0]//self.size_of_one_field*self.size_of_one_field+self.size_of_one_field/2, pos[1]//self.size_of_one_field*self.size_of_one_field+self.size_of_one_field/2)
+
+    def get_row_and_column_from_x_y(self, x,y):
+        return int(y//self.size_of_one_field),int(x//self.size_of_one_field)
