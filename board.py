@@ -1,12 +1,15 @@
 import field
 import csv
+import player
 
 class Board:
 
-    def __init__(self, size):
-        self.size_of_one_field = size
+    def __init__(self, scale, level_number, window):
+        self.size_of_one_field = int(100 * scale)
         self.board = []
-        file = csv.reader(open('./levels/level_1.csv'), delimiter=';')
+        self.window = window
+        self.top_offset = player.Bar.get_height_of_bar()
+        file = csv.reader(open('./levels/level_' + str(level_number) + '.csv'), delimiter=';')
 
         row_number = 0
         for row in file:
@@ -20,33 +23,33 @@ class Board:
                 self.board.append([])
                 for cell in row:
                     if cell == "ey":
-                        self.board[row_number - 1].append(field.Empty_Field(size))
+                        self.board[row_number - 1].append(field.Empty_Field(self.size_of_one_field))
                     elif cell == "sh":
-                        self.board[row_number - 1].append(field.Straight_way_field_hotizontal(size))
+                        self.board[row_number - 1].append(field.Straight_way_field_hotizontal(self.size_of_one_field))
                     elif cell == "sv":
-                        self.board[row_number - 1].append(field.Straight_way_field_vertikal(size))
+                        self.board[row_number - 1].append(field.Straight_way_field_vertikal(self.size_of_one_field))
                     elif cell == "elu":
-                        self.board[row_number - 1].append(field.Edge_way_field_left_up(size))
+                        self.board[row_number - 1].append(field.Edge_way_field_left_up(self.size_of_one_field))
                     elif cell == "eld":
-                        self.board[row_number - 1].append(field.Edge_way_field_left_down(size))
+                        self.board[row_number - 1].append(field.Edge_way_field_left_down(self.size_of_one_field))
                     elif cell == "eru":
-                        self.board[row_number - 1].append(field.Edge_way_field_right_up(size))
+                        self.board[row_number - 1].append(field.Edge_way_field_right_up(self.size_of_one_field))
                     elif cell == "erd":
-                        self.board[row_number - 1].append(field.Edge_way_field_right_down(size))
+                        self.board[row_number - 1].append(field.Edge_way_field_right_down(self.size_of_one_field))
             row_number += 1
 
         if self.start_side == "l":
-            self.start_pos_x = -size//2
-            self.start_pos_y = size * start_y - size // 2
+            self.start_pos_x = -self.size_of_one_field//2
+            self.start_pos_y = self.size_of_one_field * start_y - self.size_of_one_field // 2
         elif self.start_side == "u":
-            self.start_pos_x = size * start_x - size // 2
-            self.start_pos_y = -size//2
+            self.start_pos_x = self.size_of_one_field * start_x - self.size_of_one_field // 2
+            self.start_pos_y = -self.size_of_one_field//2
         elif self.start_side == "r":
-            self.start_pos_x = size * len(self.board[0]) + size // 2
-            self.start_pos_y = self.start_pos_y = size * start_y - size // 2
+            self.start_pos_x = self.size_of_one_field * len(self.board[0]) + self.size_of_one_field // 2
+            self.start_pos_y = self.start_pos_y = self.size_of_one_field * start_y - self.size_of_one_field // 2
         elif self.start_side == "d":
-            self.start_pos_x = size * start_x - size // 2
-            self.start_pos_y = size * len(self.board) + size // 2
+            self.start_pos_x = self.size_of_one_field * start_x - self.size_of_one_field // 2
+            self.start_pos_y = self.size_of_one_field * len(self.board) + self.size_of_one_field // 2
 
         self.board[end_x - 1][end_y - 1].set_as_end_block()
 
@@ -62,13 +65,13 @@ class Board:
     def get_board_height(self):
         return len(self.board)
 
-    def render(self, window):
+    def render(self):
         for row in range(self.get_board_height()):
             for column in range(self.get_board_width()):
-                window.blit(self.get_field_at(row, column).get_image(),
-                            (self.size_of_one_field * column, self.size_of_one_field * row))
+                self.window.blit(self.get_field_at(row, column).get_image(),
+                            (self.size_of_one_field * column, self.size_of_one_field * row + self.top_offset))
                 if (self.get_field_at(row, column).get_tower()):
-                    self.get_field_at(row, column).get_tower().render(window, self.size_of_one_field * column + self.size_of_one_field // 2, self.size_of_one_field * row + self.size_of_one_field // 2)
+                    self.get_field_at(row, column).get_tower().render(self.window, self.size_of_one_field * column + self.size_of_one_field // 2, self.size_of_one_field * row + self.size_of_one_field // 2 + self.top_offset)
 
 
     def get_size_of_one_field(self):

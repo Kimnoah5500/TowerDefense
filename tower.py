@@ -1,30 +1,31 @@
 import pygame
 
 class TowerManager:
-    towers = []
+
 
     def __init__(self, scale, enemy_manager, projectile_manager):
         self.scale = scale
         self.enemy_manager = enemy_manager
         self.projectile_manager = projectile_manager
+        self.towers = []
 
     def add_tower(self, code, pos):
-        new_tower = Basic_tower(self.scale * 80, pos, self.enemy_manager)
+        new_tower = Basic_tower(self.scale, pos, self.enemy_manager)
         self.towers.append(new_tower)
         return new_tower
 
-    def manage(self, dt):
+    def manage(self, time):
         for tower in self.towers:
-            tower.add_time(dt)
+            tower.add_time(time)
             if tower.shot_approved():
                 enemys_in_range = tower.search_for_enemy_in_range()
                 if enemys_in_range:
-                    self.projectile_manager.new_projectile("Test", enemys_in_range[0].get_pos(), tower.get_pos())
+                    self.projectile_manager.new_projectile("Test", enemys_in_range[0].get_pos(), tower.get_pos(), enemys_in_range[0])
                     tower.shot_fired()
 
 class Tower:
-    def __init__(self, size, pos, range, enemy_manager, projectile_code, cooldown):
-        self.size = size
+    def __init__(self, scale, pos, range, enemy_manager, projectile_code, cooldown):
+        self.size = int(scale * 80)
         self.pos_x = pos[0]
         self.pos_y = pos[1]
         self.range = range
@@ -55,7 +56,9 @@ class Tower:
         self.time_since_last_shot = 0
 
 class Basic_tower(Tower):
-    def __init__(self, size, pos, enemy_manager):
-        Tower.__init__(self, size, pos, 160, enemy_manager, "Test", 200)
+    def __init__(self, scale, pos, enemy_manager):
+        range = 160 * scale
+        cooldown = 200
+        Tower.__init__(self, scale, pos, range, enemy_manager, "Test", cooldown)
         self.image = pygame.image.load('./ressources/Basic_tower.png')
-        self.image = pygame.transform.scale(self.image, (int(size * 0.8), size))
+        self.image = pygame.transform.scale(self.image, (int(scale * 60), int(scale * 80)))
