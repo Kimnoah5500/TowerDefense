@@ -40,16 +40,16 @@ class Board:
 
         if self.start_side == "l":
             self.start_pos_x = -self.size_of_one_field//2
-            self.start_pos_y = self.size_of_one_field * start_y - self.size_of_one_field // 2
+            self.start_pos_y = self.size_of_one_field * start_y - self.size_of_one_field // 2 + self.top_offset
         elif self.start_side == "u":
             self.start_pos_x = self.size_of_one_field * start_x - self.size_of_one_field // 2
-            self.start_pos_y = -self.size_of_one_field//2
+            self.start_pos_y = -self.size_of_one_field//2 + self.top_offset
         elif self.start_side == "r":
             self.start_pos_x = self.size_of_one_field * len(self.board[0]) + self.size_of_one_field // 2
-            self.start_pos_y = self.start_pos_y = self.size_of_one_field * start_y - self.size_of_one_field // 2
+            self.start_pos_y = self.start_pos_y = self.size_of_one_field * start_y - self.size_of_one_field // 2 + self.top_offset
         elif self.start_side == "d":
             self.start_pos_x = self.size_of_one_field * start_x - self.size_of_one_field // 2
-            self.start_pos_y = self.size_of_one_field * len(self.board) + self.size_of_one_field // 2
+            self.start_pos_y = self.size_of_one_field * len(self.board) + self.size_of_one_field // 2 + self.top_offset
 
         self.board[end_x - 1][end_y - 1].set_as_end_block()
 
@@ -89,7 +89,6 @@ class Board:
 
     def add_tower_to_field(self, tower, row, column):
         self.board[row][column].place_tower(tower)
-        return (self.size_of_one_field * column + self.size_of_one_field // 2, self.size_of_one_field * row + self.size_of_one_field // 2)
 
     def get_start_pos(self):
         return (self.start_pos_x, self.start_pos_y)
@@ -98,7 +97,7 @@ class Board:
         return (column * self.size_of_one_field + self.size_of_one_field // 2, row * self.size_of_one_field + self.size_of_one_field // 2)
 
     def get_middle_of_on_field_from_x_y(self, pos):
-        return (pos[0]//self.size_of_one_field*self.size_of_one_field+self.size_of_one_field/2, pos[1]//self.size_of_one_field*self.size_of_one_field+self.size_of_one_field/2)
+        return (pos[0]  + self.top_offset //self.size_of_one_field*self.size_of_one_field+self.size_of_one_field/2, pos[1]  + self.top_offset //self.size_of_one_field*self.size_of_one_field+self.size_of_one_field/2)
 
     def get_row_and_column_from_x_y(self, x,y):
-        return int(y//self.size_of_one_field),int(x//self.size_of_one_field)
+        return int((y - self.top_offset)//self.size_of_one_field), int(x//self.size_of_one_field)

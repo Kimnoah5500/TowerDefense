@@ -7,7 +7,11 @@ class TowerManager:
         self.projectile_manager = projectile_manager
         self.towers = []
 
-    def add_tower(self, code, pos):
+    def add_tower(self, code, row_column, size_of_one_field, top_offset):
+        print(size_of_one_field)
+        pos = (row_column[1] * size_of_one_field + size_of_one_field // 2, row_column[0] * size_of_one_field + size_of_one_field // 2 + top_offset)
+        print(row_column)
+        print(pos)
         new_tower = Basic_tower(self.scale, pos, self.enemy_manager)
         self.towers.append(new_tower)
         return new_tower

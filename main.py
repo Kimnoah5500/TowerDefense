@@ -36,7 +36,7 @@ class Game:
         self.default_font = pygame.font.Font("./ressources/Alata-Regular.ttf", int(30 * self.scale))
 
         self.window = pygame.display.set_mode(
-            (int(100 * self.scale * 10), int(100 * self.scale * 5) + Player.Bar.get_height_of_bar(self.scale) + 100 * self.scale), )
+            (int(100 * self.scale * 10), int(100 * self.scale * 5) + Player.Bar.get_height_of_bar(self.scale) + 100 * self.scale))
         self.window_size = pygame.display.get_window_size()
 
         self.clock = pygame.time.Clock()
@@ -116,12 +116,6 @@ class Game:
             elif self.state == "Start_game":
                 self.start_level(self.selected_level)
                 self.clock.tick()
-                test_pos = self.play_board.get_middle_of_field(2, 5)
-                test_pos_2 = self.play_board.get_middle_of_field(2, 2)
-                test_pos_3 = self.play_board.get_middle_of_field(2, 0)
-                test_tower = self.play_board.add_tower_to_field(self.tower_manager.add_tower("lol", test_pos), 2, 5)
-                test_tower_2 = self.play_board.add_tower_to_field(self.tower_manager.add_tower("lol", test_pos_2), 2, 2)
-                test_tower_3 = self.play_board.add_tower_to_field(self.tower_manager.add_tower("lol", test_pos_3), 2, 0)
                 self.state = "Game"
             elif self.state == "Game":
                 self.bar.set_buttons([button.Button("II", self.default_font, (0, 0), (48, 34, 18),
@@ -163,10 +157,8 @@ class Game:
 
                     elif drag and event.type == pygame.MOUSEBUTTONUP:
                         drag = False
-                        x, y = self.play_board.get_middle_of_on_field_from_x_y(event.pos)
-                        y += Player.Bar.get_height_of_bar(self.scale)
-                        row, column = self.play_board.get_row_and_column_from_x_y(x, y)
-                        self.play_board.add_tower_to_field(self.tower_manager.add_tower("lol", (x, y)), row, column)
+                        row, column = self.play_board.get_row_and_column_from_x_y(event.pos[0], event.pos[1])
+                        self.play_board.add_tower_to_field(self.tower_manager.add_tower("lol", (row, column), self.play_board.get_size_of_one_field(), Player.Bar.get_height_of_bar(self.scale)), row, column)
 
             elif self.state == "Game_win":
                 self.window.fill((83, 186, 69))

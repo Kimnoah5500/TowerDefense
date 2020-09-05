@@ -27,24 +27,24 @@ class Wave_manager:
             if 20000 > self.time > 10000:
                 if self.first_wave:
                     if self.time_since_last_spawn > 1000:
-                        self.enemy_manager.new_ememy(self.first_wave.popleft())
+                        self.enemy_manager.new_enemy(self.first_wave.popleft())
                         self.time_since_last_spawn = 0
             elif 30000 > self.time > 20000:
                 if self.second_wave:
                     if self.time_since_last_spawn > 800:
-                        self.enemy_manager.new_ememy(self.second_wave.popleft())
+                        self.enemy_manager.new_enemy(self.second_wave.popleft())
                         self.time_since_last_spawn = 0
             elif self.time > 30000:
                 if self.third_wave:
                     if self.time_since_last_spawn > 400:
-                        self.enemy_manager.new_ememy(self.third_wave.popleft())
+                        self.enemy_manager.new_enemy(self.third_wave.popleft())
                         self.time_since_last_spawn = 0
                 elif not self.enemy_manager.enemys:
                     self.all_waves_completed = True
         else:
             if self.endless_mode_wave:
                 if self.time_since_last_spawn > 100:
-                    self.enemy_manager.new_ememy(self.endless_mode_wave.popleft())
+                    self.enemy_manager.new_enemy(self.endless_mode_wave.popleft())
                     self.time_since_last_spawn = 0
             else:
                 self.time_since_last_spawn = -9900
@@ -68,7 +68,7 @@ class Enemy_manager:
         self.window = window
         self.start_pos = board.get_start_pos()
 
-    def new_ememy(self, enemy_code):
+    def new_enemy(self, enemy_code):
         if enemy_code == "ba":
             self.enemys.append(Ballon(self.scale, self.board, self.start_pos))
 
@@ -253,7 +253,7 @@ class Enemy:
 
     def get_middle_of_current_field(self):
         size_of_fields = self.board.get_size_of_one_field()
-        return self.pos_x // size_of_fields * size_of_fields + size_of_fields // 2, self.pos_y // size_of_fields * size_of_fields + size_of_fields // 2
+        return self.pos_x // size_of_fields * size_of_fields + size_of_fields // 2, self.pos_y // size_of_fields * size_of_fields + size_of_fields // 2 + self.top_offset
 
     def is_at_end(self):
         current_field = self.board.get_field_at_x_y(self.pos_x, self.pos_y)
@@ -291,7 +291,7 @@ class Enemy:
         return (self.pos_x, self.pos_y)
 
     def render(self, window):
-        window.blit(self.image, (self.pos_x - self.size // 2, self.pos_y - self.size // 2 + self.top_offset))
+        window.blit(self.image, (self.pos_x - self.size // 2, self.pos_y - self.size // 2))
 
 
 class Ballon(Enemy):

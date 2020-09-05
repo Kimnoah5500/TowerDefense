@@ -36,7 +36,6 @@ class Projectile:
         self.pos_x = start_pos[0]
         self.pos_y = start_pos[1]
         self.target_pos = target_pos
-        self.top_offset = Player.Bar.get_height_of_bar(scale)
 
     def update_pos(self):
         self.pos_x += self.movement_x
@@ -46,7 +45,7 @@ class Projectile:
         return self.target_pos[0] - self.vel < self.pos_x < self.target_pos[0] + self.vel and self.target_pos[1] - self.vel < self.pos_y < self.target_pos[1] + self.vel
 
     def render(self, window):
-        window.blit(self.image, (self.pos_x - self.size // 2, self.pos_y - self.size // 2 + self.top_offset))
+        window.blit(self.image, (self.pos_x - self.size // 2, self.pos_y - self.size // 2))
 
 class Canon_ball(Projectile):
     def __init__(self, target_pos, start_pos, scale, target_enemy):
