@@ -1,5 +1,63 @@
 import pygame
 import player as Player
+from collections import deque
+
+class Wave_manager:
+    def __init__(self, enemy_manager):
+        self.setup_waves()
+        self.endless_mode = False
+        self.enemy_manager = enemy_manager
+        self.time = 0
+        self.time_since_last_spawn = 0
+        self.all_waves_completed = False
+
+    def setup_waves(self):
+        self.first_wave = deque(["ba", "ba", "ba", "ba", "ba", "ba", "ba"])
+        self.second_wave = deque(["ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba"])
+        self.third_wave = deque(
+            ["ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba",
+             "ba", "ba", "ba", "ba"])
+        self.endless_mode_wave = deque(
+            ["ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba"])
+
+    def manage(self, time_difference):
+        self.time_since_last_spawn += time_difference
+        if not self.endless_mode:
+            self.time += time_difference
+            if 20000 > self.time > 10000:
+                if self.first_wave:
+                    if self.time_since_last_spawn > 1000:
+                        self.enemy_manager.new_ememy(self.first_wave.popleft())
+                        self.time_since_last_spawn = 0
+            elif 30000 > self.time > 20000:
+                if self.second_wave:
+                    if self.time_since_last_spawn > 800:
+                        self.enemy_manager.new_ememy(self.second_wave.popleft())
+                        self.time_since_last_spawn = 0
+            elif self.time > 30000:
+                if self.third_wave:
+                    if self.time_since_last_spawn > 400:
+                        self.enemy_manager.new_ememy(self.third_wave.popleft())
+                        self.time_since_last_spawn = 0
+                elif not self.enemy_manager.enemys:
+                    self.all_waves_completed = True
+        else:
+            if self.endless_mode_wave:
+                if self.time_since_last_spawn > 100:
+                    self.enemy_manager.new_ememy(self.endless_mode_wave.popleft())
+                    self.time_since_last_spawn = 0
+            else:
+                self.time_since_last_spawn = -9900
+                self.endless_mode_wave = deque(["ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba"])
+
+    def set_endless_mode(self):
+        self.endless_mode = True
+
+    def get_all_waves_completed(self):
+        if not self.endless_mode:
+            return self.all_waves_completed
+        else:
+            return False
 
 class Enemy_manager:
     def __init__(self, board, player, scale, window):
@@ -10,8 +68,9 @@ class Enemy_manager:
         self.window = window
         self.start_pos = board.get_start_pos()
 
-    def new_ememy(self):
-        self.enemys.append(Ballon(self.scale, self.board, self.start_pos))
+    def new_ememy(self, enemy_code):
+        if enemy_code == "ba":
+            self.enemys.append(Ballon(self.scale, self.board, self.start_pos))
 
     def hit_enemy(self, enemy, damage):
         if self.enemys.__contains__(enemy):

@@ -1,12 +1,13 @@
 import pygame
 
 class TowerManager:
-    towers = []
+
 
     def __init__(self, scale, enemy_manager, projectile_manager):
         self.scale = scale
         self.enemy_manager = enemy_manager
         self.projectile_manager = projectile_manager
+        self.towers = []
 
     def add_tower(self, code, pos):
         new_tower = Basic_tower(self.scale, pos, self.enemy_manager)
