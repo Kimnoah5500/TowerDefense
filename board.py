@@ -8,7 +8,7 @@ class Board:
         self.size_of_one_field = int(100 * scale)
         self.board = []
         self.window = window
-        self.top_offset = player.Bar.get_height_of_bar()
+        self.top_offset = player.Bar.get_height_of_bar(scale)
         file = csv.reader(open('./levels/level_' + str(level_number) + '.csv'), delimiter=';')
 
         row_number = 0

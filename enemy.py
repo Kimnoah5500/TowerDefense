@@ -115,7 +115,7 @@ class Enemy:
         self.vel = vel
         self.last_movement = self.board.get_supposed_start_direction()
         self.health_points = health_points
-        self.top_offset = Player.Bar.get_height_of_bar()
+        self.top_offset = Player.Bar.get_height_of_bar(scale)
 
     def update_pos(self):
         field_code = self.board.get_field_at_x_y(self.pos_x, self.pos_y).get_field_code()
@@ -295,7 +295,7 @@ class Enemy:
 
 
 class Ballon(Enemy):
-    def __init__(self, scale, board, start_pos, ):
+    def __init__(self, scale, board, start_pos):
         health_points = 100
         damage = 10
         vel = 5 * scale

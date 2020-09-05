@@ -16,12 +16,13 @@ if __name__ == '__main__':
 
 
 class Game:
-    pygame.Rect
     player = None
     play_board = None
     enemy_manager = None
     projectile_manager = None
     tower_manager = None
+    wave_manager = None
+    shop = None
     bar = None
     selected_level = None
 
@@ -35,20 +36,14 @@ class Game:
         self.default_font = pygame.font.Font("./ressources/Alata-Regular.ttf", int(30 * self.scale))
 
         self.window = pygame.display.set_mode(
-            (int(100 * self.scale * 10), int(100 * self.scale * 5) + Player.Bar.get_height_of_bar()), )
+            (int(100 * self.scale * 10), int(100 * self.scale * 5) + Player.Bar.get_height_of_bar(self.scale) + 100 * self.scale), )
         self.window_size = pygame.display.get_window_size()
 
         self.clock = pygame.time.Clock()
 
     def run(self):
+        drag = False
         run = True
-shop = shop.Shop(0, play_board.get_board_height() * size_of_one_field, play_board.get_board_width() * size_of_one_field)
-shop.render(window)
-
-time_since_last_action = 0
-
-drag = False
-run = True
 
         while run:
             if self.state == "Menu":
@@ -141,6 +136,9 @@ run = True
                     self.tower_manager.manage(time_difference)
                     self.projectile_manager.manage()
                     self.bar.render()
+                    self.shop.render(self.window)
+                    if drag:
+                        self.shop.dragItem(index, pygame.mouse.get_pos(), self.window)
                     if self.wave_manager.get_all_waves_completed():
                         self.state = "Game_win"
                 else:
@@ -156,11 +154,19 @@ run = True
                 pygame.display.update()
                 for event in pygame.event.get():
                     if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                        pos = pygame.mouse.get_pos()
+                        pos = event.pos
+                        drag, index = self.shop.checkShopClick(pos[0], pos[1])
                         for a_button in self.bar.get_buttons():
                             if a_button.get_box().collidepoint(pos):
                                 if a_button.get_text() == "II":
                                     self.state = "Pause_game"
+
+                    elif drag and event.type == pygame.MOUSEBUTTONUP:
+                        drag = False
+                        x, y = self.play_board.get_middle_of_on_field_from_x_y(event.pos)
+                        y += Player.Bar.get_height_of_bar(self.scale)
+                        row, column = self.play_board.get_row_and_column_from_x_y(x, y)
+                        self.play_board.add_tower_to_field(self.tower_manager.add_tower("lol", (x, y)), row, column)
 
             elif self.state == "Game_win":
                 self.window.fill((83, 186, 69))
@@ -236,7 +242,7 @@ run = True
                             run = False
 
                     elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                        pos = pygame.mouse.get_pos()
+                        pos = event.pos
                         for a_button in self.bar.get_buttons():
                             if a_button.get_box().collidepoint(pos):
                                 if a_button.get_text() == "Fortsetzen":
@@ -245,27 +251,6 @@ run = True
                                     self.state = "Menu"
                                 elif a_button.get_text() == "Beenden":
                                     run = False
-
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            x,y = event.pos
-            drag, index = shop.checkShopClick(x,y)
-
-        if drag and event.type == pygame.MOUSEBUTTONUP:
-            drag = False
-            x,y = play_board.get_middle_of_on_field_from_x_y(event.pos)
-            row, colum = play_board.get_row_and_column_from_x_y(x,y)
-            play_board.add_tower_to_field(tower_manager.add_tower("lol", (x,y)),row, colum )
-
-
-    keys = pygame.key.get_pressed()
-    mousePos = pygame.mouse.get_pos()
-    mousePressed = pygame.mouse.get_pressed()
-    mousePosRel = pygame.mouse.get_rel()
-    if mousePressed[0] and x < mousePos[0] < x+width and y < mousePos[1] < y+height or mousePressed[0] and x < mousePos[0]-mousePosRel[0] < x+width and y < mousePos[1]-mousePosRel[1] < y+height:
-        x = mousePos[0]-width//2
-        y = mousePos[1]-height//2
-
-    dt = clock.tick()
 
             elif self.state == "Game_Over":
                 self.window.fill((255, 0, 0))
@@ -319,7 +304,7 @@ run = True
         self.projectile_manager = projectile.Projectile_manager(self.enemy_manager, self.scale, self.window)
         self.tower_manager = tower.TowerManager(self.scale, self.enemy_manager, self.projectile_manager)
         self.bar = Player.Bar(self.player, self.window, self.scale)
+        self.shop = shop.Shop(0, self.play_board.get_board_height() * 100 * self.scale, self.play_board.get_board_width() * self.scale * 100)
         self.time = 0
 
-
-pygame.quit()
+    pygame.quit()

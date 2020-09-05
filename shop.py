@@ -11,7 +11,7 @@ class Shop:
         self.items = self.getItems()
 
     def render(self, window):
-        window.blit(self.image ,(self.x, self.y))
+        window.blit(self.image, (self.x, self.y))
         for item in self.items:
             index = self.items.index(item)
             item = pygame.transform.scale(item, (self.height - 20, self.height - 20))
@@ -23,7 +23,7 @@ class Shop:
         test = pygame.image.load('./ressources/Test.png')
         return [basic_tower, test]
 
-    def checkShopClick(self, x,y):
+    def checkShopClick(self, x, y):
         for item in self.items:
             index = self.items.index(item)
             self.rect = item.get_rect(x = self.x + index * (item.get_width() + 10), y = self.y + 10)

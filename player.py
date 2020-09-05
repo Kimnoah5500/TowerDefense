@@ -14,13 +14,13 @@ class Player:
         return self.health_points <= 0
 
 class Bar:
-    bar_height = 43
     @staticmethod
-    def get_height_of_bar():
-        return 43
+    def get_height_of_bar(scale):
+        return 43 * scale
 
     def __init__(self, player, window, scale):
         self.scale = scale
+        self.bar_height = 43 * scale
         self.window = window
         self.player = player
         pygame.font.init()
