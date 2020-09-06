@@ -70,7 +70,7 @@ class Enemy_manager:
 
     def new_enemy(self, enemy_code):
         if enemy_code == "ba":
-            self.enemys.append(Ballon(self.scale, self.board, self.start_pos))
+            self.enemys.append(Ballon(self.scale, self.board, self.start_pos, self.window))
 
     def hit_enemy(self, enemy, damage):
         if self.enemys.__contains__(enemy):
@@ -105,7 +105,7 @@ class Enemy_manager:
 
 
 class Enemy:
-    def __init__(self, board, scale, start_pos, health_points, money_value, damage, vel):
+    def __init__(self, board, scale, start_pos, health_points, money_value, damage, vel, window):
         self.money_value = money_value
         self.board = board
         self.size = scale * 60
@@ -116,6 +116,7 @@ class Enemy:
         self.last_movement = self.board.get_supposed_start_direction()
         self.health_points = health_points
         self.top_offset = Player.Bar.get_height_of_bar(scale)
+        self.window = window
 
     def update_pos(self):
         field_code = self.board.get_field_at_x_y(self.pos_x, self.pos_y).get_field_code()
@@ -148,7 +149,7 @@ class Enemy:
                 self.last_movement = "r"
         elif self.last_movement == "u":
             if field_code == "eld":
-                if (self.is_over_middle_in_y_direction()):
+                if self.is_over_middle_in_y_direction():
                     self.pos_x -= self.vel
                     self.last_movement = "l"
                 else:
@@ -158,7 +159,7 @@ class Enemy:
                 self.pos_y -= self.vel
                 self.last_movement = "u"
             elif field_code == "erd":
-                if (self.is_over_middle_in_y_direction()):
+                if self.is_over_middle_in_y_direction():
                     self.pos_x += self.vel
                     self.last_movement = "r"
                 else:
@@ -220,40 +221,43 @@ class Enemy:
                 self.last_movement = "d"
 
     def correct_to_middle(self):
+        middle = self.get_middle_of_current_field()
         if self.last_movement == "d" or self.last_movement == "u":
-            middle = self.get_middle_of_current_field()[0]
-            if self.pos_x < middle:
+            pygame.draw.rect(self.window, (255, 0, 0), pygame.Rect(middle[0] - 2, middle[1] - 50, 4, 100))
+            if self.pos_x < middle[0]:
                 self.pos_x += 1
-            elif self.pos_x > middle:
+            elif self.pos_x > middle[0]:
                 self.pos_x -= 1
         if self.last_movement == "r" or self.last_movement == "l":
-            middle = self.get_middle_of_current_field()[1]
-            if self.pos_y < middle:
+            pygame.draw.rect(self.window, (255, 0, 0), pygame.Rect(middle[0] - 50, middle[1] - 2, 100, 4))
+            if self.pos_y < middle[1]:
                 self.pos_y += 1
-            elif self.pos_y > middle:
+            elif self.pos_y > middle[1]:
                 self.pos_y -= 1
 
     def is_over_middle_in_x_direction(self):
-        middle = self.get_middle_of_current_field()[0]
+        middle = self.get_middle_of_current_field()
+        pygame.draw.rect(self.window, (255, 0, 0), pygame.Rect(middle[0]-2, middle[1]-20, 4, 40))
         if self.last_movement == "r":
-            return self.pos_x > middle
+            return self.pos_x > middle[0]
         elif self.last_movement == "l":
-            return self.pos_x < middle
+            return self.pos_x < middle[0]
         else:
             return False
 
     def is_over_middle_in_y_direction(self):
-        middle = self.get_middle_of_current_field()[1]
+        middle = self.get_middle_of_current_field()
+        pygame.draw.rect(self.window, (255, 0, 0), pygame.Rect(middle[0] - 20, middle[1] - 2, 40, 4))
         if self.last_movement == "d":
-            return self.pos_y > middle
+            return self.pos_y > middle[1]
         elif self.last_movement == "u":
-            return self.pos_y < middle
+            return self.pos_y < middle[1]
         else:
             return False
 
     def get_middle_of_current_field(self):
         size_of_fields = self.board.get_size_of_one_field()
-        return self.pos_x // size_of_fields * size_of_fields + size_of_fields // 2, self.pos_y // size_of_fields * size_of_fields + size_of_fields // 2 + self.top_offset
+        return (self.pos_x // size_of_fields * size_of_fields + size_of_fields // 2, self.pos_y // size_of_fields * size_of_fields + size_of_fields // 2 + self.top_offset)
 
     def is_at_end(self):
         current_field = self.board.get_field_at_x_y(self.pos_x, self.pos_y)
@@ -291,15 +295,17 @@ class Enemy:
         return (self.pos_x, self.pos_y)
 
     def render(self, window):
-        window.blit(self.image, (self.pos_x - self.size // 2, self.pos_y - self.size // 2))
+        #window.blit(self.image, (self.pos_x - self.size // 2, self.pos_y - self.size // 2))
+        pygame.draw.rect(window, (0, 0, 0), pygame.Rect(self.pos_x - 2, self.pos_y - 10, 4, 20))
+        pygame.draw.rect(window, (0, 0, 0), pygame.Rect(self.pos_x - 10, self.pos_y - 2, 20, 4))
 
 
 class Ballon(Enemy):
-    def __init__(self, scale, board, start_pos):
+    def __init__(self, scale, board, start_pos, window):
         health_points = 100
         damage = 10
         vel = 5 * scale
         money_value = 200
-        Enemy.__init__(self, board, scale, start_pos, health_points, money_value, damage, vel)
+        Enemy.__init__(self, board, scale, start_pos, health_points, money_value, damage, vel, window)
         self.image = pygame.image.load('./ressources/Enemy_ballon.png')
         self.image = pygame.transform.scale(self.image, (int(scale * 60), int(scale * 60)))
