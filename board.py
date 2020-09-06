@@ -57,7 +57,7 @@ class Board:
         return self.board[row][column]
 
     def get_field_at_x_y(self, x, y):
-        return self.board[int(y//self.size_of_one_field)][int(x//self.size_of_one_field)]
+        return self.board[int((y - self.top_offset)//self.size_of_one_field)][int(x//self.size_of_one_field)]
 
     def get_board_width(self):
         return len(self.board[0])
@@ -94,7 +94,7 @@ class Board:
         return (self.start_pos_x, self.start_pos_y)
 
     def get_middle_of_field(self, row, column):
-        return (column * self.size_of_one_field + self.size_of_one_field // 2, row * self.size_of_one_field + self.size_of_one_field // 2)
+        return (column * self.size_of_one_field + self.size_of_one_field // 2, row * self.size_of_one_field + self.size_of_one_field // 2 + self.top_offset)
 
     def get_middle_of_on_field_from_x_y(self, pos):
         return (pos[0]  + self.top_offset //self.size_of_one_field*self.size_of_one_field+self.size_of_one_field/2, pos[1]  + self.top_offset //self.size_of_one_field*self.size_of_one_field+self.size_of_one_field/2)
