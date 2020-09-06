@@ -10,7 +10,9 @@ class Projectile_manager:
         self.projectiles = []
 
     def new_projectile(self, code, target_pos, start_pos, target_enemy):
-        self.projectiles.append(Canon_ball(target_pos, start_pos, self.scale, target_enemy))
+        if code == "caba":
+            self.projectiles.append(Canon_ball(target_pos, start_pos, self.scale, target_enemy))
+        #TODO Add Projectile Codes here if there are any new
 
     def manage(self):
         for projectile in self.projectiles:

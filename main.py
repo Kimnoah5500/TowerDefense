@@ -2,21 +2,16 @@ import pygame
 
 import board
 import enemy
-import main as game
-import player as Player
+import player
 import projectile
 import shop
 import tower
 import button
 import text_box
 
-if __name__ == '__main__':
-    game = game.Game()
-    game.run()
 
-
-class Game:
-    player = None
+class Game(object):
+    current_player = None
     play_board = None
     enemy_manager = None
     projectile_manager = None
@@ -36,7 +31,8 @@ class Game:
         self.default_font = pygame.font.Font("./ressources/Alata-Regular.ttf", int(30 * self.scale))
 
         self.window = pygame.display.set_mode(
-            (int(100 * self.scale * 10), int(100 * self.scale * 5) + Player.Bar.get_height_of_bar(self.scale) + 100 * self.scale))
+            (int(100 * self.scale * 10),
+             int(100 * self.scale * 5) + player.Bar.get_height_of_bar(self.scale) + 100 * self.scale))
         self.window_size = pygame.display.get_window_size()
 
         self.clock = pygame.time.Clock()
@@ -123,7 +119,7 @@ class Game:
 
                 time_difference = self.clock.tick()
 
-                if not self.player.is_dead():
+                if not self.current_player.is_dead():
                     self.play_board.render()
                     self.enemy_manager.manage()
                     self.wave_manager.manage(time_difference)
@@ -147,6 +143,13 @@ class Game:
 
                 pygame.display.update()
                 for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        run = False
+
+                    elif event.type == pygame.KEYDOWN:
+                        if pygame.key.get_pressed()[pygame.K_ESCAPE]:
+                            run = False
+
                     if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                         pos = event.pos
                         drag, index = self.shop.checkShopClick(pos[0], pos[1])
@@ -158,7 +161,9 @@ class Game:
                     elif drag and event.type == pygame.MOUSEBUTTONUP:
                         drag = False
                         row, column = self.play_board.get_row_and_column_from_x_y(event.pos[0], event.pos[1])
-                        self.play_board.add_tower_to_field(self.tower_manager.add_tower("lol", (row, column), self.play_board.get_size_of_one_field(), Player.Bar.get_height_of_bar(self.scale)), row, column)
+                        self.play_board.add_tower_to_field(
+                            self.tower_manager.add_tower("bato", (row, column), self.play_board.get_size_of_one_field(),
+                                                         player.Bar.get_height_of_bar(self.scale)), row, column)
 
             elif self.state == "Game_win":
                 self.window.fill((83, 186, 69))
@@ -166,13 +171,14 @@ class Game:
                 game_over_text = text_box.Text_box("Gewonnen", big_font,
                                                    (0, self.window_size[1] // 2 - 120 * self.scale), self.window_size,
                                                    self.window, center=True)
-                buttons = [button.Button("Endlosmodus", self.default_font, (0, self.window_size[1] // 2 - 40 * self.scale),
-                                         (60, 133, 50), self.window_size, self.window, center=True),
-                           button.Button("Hauptmenü", self.default_font,
-                                         (0, self.window_size[1] // 2 + 10 * self.scale), (60, 133, 50), self.window_size,
-                                         self.window, center=True),
-                           button.Button("Beenden", self.default_font, (0, self.window_size[1] // 2 + 60 * self.scale),
-                                         (60, 133, 50), self.window_size, self.window, center=True)]
+                buttons = [
+                    button.Button("Endlosmodus", self.default_font, (0, self.window_size[1] // 2 - 40 * self.scale),
+                                  (60, 133, 50), self.window_size, self.window, center=True),
+                    button.Button("Hauptmenü", self.default_font,
+                                  (0, self.window_size[1] // 2 + 10 * self.scale), (60, 133, 50), self.window_size,
+                                  self.window, center=True),
+                    button.Button("Beenden", self.default_font, (0, self.window_size[1] // 2 + 60 * self.scale),
+                                  (60, 133, 50), self.window_size, self.window, center=True)]
 
                 game_over_text.render()
                 for a_button in buttons:
@@ -289,14 +295,20 @@ class Game:
 
     def start_level(self, level_number):
         self.window.fill((0, 0, 0))
-        self.player = Player.Player()
+        self.current_player = player.Player()
         self.play_board = board.Board(self.scale, level_number, self.window)
-        self.enemy_manager = enemy.Enemy_manager(self.play_board, self.player, self.scale, self.window)
+        self.enemy_manager = enemy.Enemy_manager(self.play_board, self.current_player, self.scale, self.window)
         self.wave_manager = enemy.Wave_manager(self.enemy_manager)
         self.projectile_manager = projectile.Projectile_manager(self.enemy_manager, self.scale, self.window)
         self.tower_manager = tower.TowerManager(self.scale, self.enemy_manager, self.projectile_manager)
-        self.bar = Player.Bar(self.player, self.window, self.scale)
-        self.shop = shop.Shop(0, self.play_board.get_board_height() * 100 * self.scale, self.play_board.get_board_width() * self.scale * 100)
+        self.bar = player.Bar(self.current_player, self.window, self.scale)
+        self.shop = shop.Shop(0, self.play_board.get_board_height() * 100 * self.scale,
+                              self.play_board.get_board_width() * self.scale * 100)
         self.time = 0
 
     pygame.quit()
+
+
+if __name__ == '__main__':
+    game = Game()
+    game.run()
