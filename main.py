@@ -128,7 +128,7 @@ class Game(object):
                     self.bar.render()
                     self.shop.render(self.window)
                     if drag:
-                        self.shop.dragItem(index, pygame.mouse.get_pos(), self.window)
+                        self.shop.dragItem(index, pygame.mouse.get_pos(), self.window, self.tower_manager)
                     if self.wave_manager.get_all_waves_completed():
                         self.state = "Game_win"
                 else:
@@ -160,9 +160,10 @@ class Game(object):
 
                     elif drag and event.type == pygame.MOUSEBUTTONUP:
                         drag = False
-                        row, column = self.play_board.get_row_and_column_from_x_y(event.pos[0], event.pos[1])
-                        self.play_board.add_tower_to_field(
-                            self.tower_manager.add_tower("bato", (row, column), self.play_board.get_size_of_one_field(),
+                        if self.play_board.check_if_placable(event.pos[0], event.pos[1]) and self.shop.check_if_affordable(index, self.current_player):
+                            row, column = self.play_board.get_row_and_column_from_x_y(event.pos[0], event.pos[1])
+                            self.play_board.add_tower_to_field(
+                                self.tower_manager.add_tower(self.shop.get_item_code(index), (row, column), self.play_board.get_size_of_one_field(),
                                                          player.Bar.get_height_of_bar(self.scale)), row, column)
 
             elif self.state == "Game_win":
@@ -302,8 +303,8 @@ class Game(object):
         self.projectile_manager = projectile.Projectile_manager(self.enemy_manager, self.scale, self.window)
         self.tower_manager = tower.TowerManager(self.scale, self.enemy_manager, self.projectile_manager)
         self.bar = player.Bar(self.current_player, self.window, self.scale)
-        self.shop = shop.Shop(0, self.play_board.get_board_height() * 100 * self.scale,
-                              self.play_board.get_board_width() * self.scale * 100)
+        self.shop = shop.Shop(0, self.play_board.get_board_height() * 100 * self.scale + player.Bar.get_height_of_bar(self.scale),
+                              self.play_board.get_board_width() * self.scale * 100, self.scale)
         self.time = 0
 
     pygame.quit()
