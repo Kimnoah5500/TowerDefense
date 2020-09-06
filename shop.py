@@ -1,15 +1,16 @@
 import pygame 
 
 class Shop:
+    height = 100
     def __init__(self, x, y, width, scale):
         self.scale = scale
         self.x = x
         self.y = y
         self.width = width
         self.height = 100 * scale
-        self.background_image = pygame.image.load('./ressources/shop_background.png')
+        self.background_image = pygame.image.load('./ressources/interface/shop_background.png')
         self.background_image = pygame.transform.scale(self.background_image, (self.width, self.height))
-        self.background_image_2 = pygame.image.load('./ressources/shop_background_2.png')
+        self.background_image_2 = pygame.image.load('./ressources/interface/shop_background_2.png')
         self.background_image_2 = pygame.transform.scale(self.background_image_2, ((self.width - 200 * scale) // 10, self.height - 20 * scale))
         self.items = self.getItems()
         self.item_names = self.get_names()
@@ -41,7 +42,7 @@ class Shop:
             
 
     def getItems(self):
-        basic_tower = pygame.image.load('./ressources/Basic_tower.png')
+        basic_tower = pygame.image.load('./ressources/towers/Basic_tower.png')
         test = pygame.image.load('./ressources/Test.png')
         test2 = pygame.image.load('./ressources/Test.png')
         return [basic_tower, test, test2]
@@ -62,16 +63,23 @@ class Shop:
     def check_if_affordable(self, index, player):
         code = self.get_item_code(index)
         if player.get_current_money() >= self.item_prices[code]:
+            return True
+        else:
+            return False
+
+    def buy_item(self, index, player):
+        code = self.get_item_code(index)
+        if player.get_current_money() >= self.item_prices[code]:
             player.reduce_money(self.item_prices[code])
             return True
         else:
             return False
 
-    def checkShopClick(self, x, y):
+    def checkShopClick(self, x, y, player):
         for item in self.items:
             index = self.items.index(item)
             self.rect = item.get_rect(x = self.x + self.width//5 * index + (self.background_image_2.get_width() - item.get_width())//2, y = self.y + 10)
-            if self.rect.collidepoint(x,y):
+            if self.rect.collidepoint(x,y) and self.check_if_affordable(index, player):
                 return True, index
         return False, None
 

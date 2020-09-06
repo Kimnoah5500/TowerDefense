@@ -53,5 +53,5 @@ class Canon_ball(Projectile):
         vel = 20 * scale
         damage = 20
         Projectile.__init__(self, target_pos, start_pos, vel, target_enemy, damage, 10, scale)
-        self.image = pygame.image.load('./ressources/Cannon_Ball.png')
+        self.image = pygame.image.load('./ressources/projectiles/Cannon_Ball.png')
         self.image = pygame.transform.scale(self.image, (int(10 * scale), int(10 * scale)))

@@ -20,9 +20,11 @@ class Player:
         return self.health_points <= 0
 
 class Bar:
+    bar_height = 43
+
     @staticmethod
-    def get_height_of_bar(scale):
-        return 43 * scale
+    def get_height_of_bar():
+        return Bar.bar_height
 
     def __init__(self, player, window, scale):
         self.scale = scale
@@ -31,9 +33,9 @@ class Bar:
         self.player = player
         pygame.font.init()
         self.default_font = pygame.font.Font("./ressources/Alata-Regular.ttf", int(30 * scale))
-        self.hearth_image = pygame.image.load('./ressources/hearth.png')
+        self.hearth_image = pygame.image.load('./ressources/interface/hearth.png')
         self.hearth_image = pygame.transform.scale(self.hearth_image, (int(scale * 30), int(scale * 30)))
-        self.coin_image = pygame.image.load('./ressources/coin.png')
+        self.coin_image = pygame.image.load('./ressources/interface/coin.png')
         self.coin_image = pygame.transform.scale(self.coin_image, (int(scale * 30), int(scale * 30)))
         self.buttons = []
 

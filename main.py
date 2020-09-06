@@ -32,13 +32,14 @@ class Game(object):
 
         self.window = pygame.display.set_mode(
             (int(100 * self.scale * 10),
-             int(100 * self.scale * 5) + player.Bar.get_height_of_bar(self.scale) + 100 * self.scale))
+             int(100 * self.scale * 5) + player.Bar.get_height_of_bar() + 100 * self.scale))
         self.window_size = pygame.display.get_window_size()
 
         self.clock = pygame.time.Clock()
 
     def run(self):
         drag = False
+        right_click_menu = None
         run = True
 
         while run:
@@ -141,6 +142,14 @@ class Game(object):
                         a_button.hovered = False
                     a_button.render()
 
+                if right_click_menu:
+                    pygame.draw.rect(self.window, (255, 0,0 ), right_click_menu.get_box())
+                    if right_click_menu.get_box().collidepoint(pygame.mouse.get_pos()):
+                        right_click_menu.hovered = True
+                    else:
+                        right_click_menu.hovered = False
+                    right_click_menu.render()
+
                 pygame.display.update()
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
@@ -150,21 +159,32 @@ class Game(object):
                         if pygame.key.get_pressed()[pygame.K_ESCAPE]:
                             run = False
 
-                    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                        pos = event.pos
-                        drag, index = self.shop.checkShopClick(pos[0], pos[1])
-                        for a_button in self.bar.get_buttons():
-                            if a_button.get_box().collidepoint(pos):
-                                if a_button.get_text() == "II":
-                                    self.state = "Pause_game"
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if event.button == 1:
+                            pos = event.pos
+                            drag, index = self.shop.checkShopClick(pos[0], pos[1], self.current_player)
+                            for a_button in self.bar.get_buttons():
+                                if a_button.get_box().collidepoint(pos):
+                                    if a_button.get_text() == "II":
+                                        self.state = "Pause_game"
+                            if right_click_menu:
+                                if right_click_menu.get_box().collidepoint(pos):
+                                    self.current_player.add_money(self.tower_manager.remove_tower(self.play_board.remove_tower_from_field(self.play_board.get_row_and_column_from_x_y(right_click_menu.get_box().left, right_click_menu.get_box().top))))
+                                    right_click_menu = None
+                                else:
+                                    right_click_menu = None
+                        elif event.button == 3:
+                            clicked_field = self.play_board.get_field_at_x_y(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+                            if clicked_field and clicked_field.get_tower():
+                                right_click_menu = button.Button("Verkaufen", pygame.font.Font('./ressources/Alata-Regular.ttf', 22 * self.scale), pygame.mouse.get_pos(), (158, 0, 0), self.window_size, self.window)
 
                     elif drag and event.type == pygame.MOUSEBUTTONUP:
                         drag = False
-                        if self.play_board.check_if_placable(event.pos[0], event.pos[1]) and self.shop.check_if_affordable(index, self.current_player):
+                        if self.play_board.check_if_placable(event.pos[0], event.pos[1]) and self.shop.buy_item(index, self.current_player):
                             row, column = self.play_board.get_row_and_column_from_x_y(event.pos[0], event.pos[1])
                             self.play_board.add_tower_to_field(
                                 self.tower_manager.add_tower(self.shop.get_item_code(index), (row, column), self.play_board.get_size_of_one_field(),
-                                                         player.Bar.get_height_of_bar(self.scale)), row, column)
+                                                         player.Bar.get_height_of_bar()), row, column)
 
             elif self.state == "Game_win":
                 self.window.fill((83, 186, 69))
@@ -303,7 +323,7 @@ class Game(object):
         self.projectile_manager = projectile.Projectile_manager(self.enemy_manager, self.scale, self.window)
         self.tower_manager = tower.TowerManager(self.scale, self.enemy_manager, self.projectile_manager)
         self.bar = player.Bar(self.current_player, self.window, self.scale)
-        self.shop = shop.Shop(0, self.play_board.get_board_height() * 100 * self.scale + player.Bar.get_height_of_bar(self.scale),
+        self.shop = shop.Shop(0, self.play_board.get_board_height() * 100 * self.scale + player.Bar.get_height_of_bar(),
                               self.play_board.get_board_width() * self.scale * 100, self.scale)
         self.time = 0
 

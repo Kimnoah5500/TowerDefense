@@ -15,6 +15,10 @@ class TowerManager:
         self.towers.append(new_tower)
         return new_tower
 
+    def remove_tower(self, tower):
+        self.towers.remove(tower)
+        return tower.cost
+
     def manage(self, time):
         for tower in self.towers:
             tower.add_time(time)
@@ -31,10 +35,11 @@ class TowerManager:
             return 0
 
 class Tower:
-    def __init__(self, scale, pos, range, enemy_manager, projectile_code, cooldown):
+    def __init__(self, scale, pos, range, enemy_manager, projectile_code, cooldown, cost):
         self.size = int(scale * 80)
         self.pos_x = pos[0]
         self.pos_y = pos[1]
+        self.cost = cost
         self.range = range
         self.enemy_manager = enemy_manager
         self.projectile_code = projectile_code
@@ -70,7 +75,8 @@ class Basic_tower(Tower):
     def __init__(self, scale, pos, enemy_manager):
         cooldown = 200
         projectile_code = "caba"
-        Tower.__init__(self, scale, pos, self.range * scale, enemy_manager, projectile_code, cooldown)
-        self.image = pygame.image.load('./ressources/Basic_tower.png')
+        cost = 200
+        Tower.__init__(self, scale, pos, self.range * scale, enemy_manager, projectile_code, cooldown, cost)
+        self.image = pygame.image.load('./ressources/towers/Basic_tower.png')
         self.image = pygame.transform.scale(self.image, (int(scale * 60), int(scale * 80)))
         

@@ -1,14 +1,15 @@
 import field
 import csv
 import player
+import pygame
+import shop
 
 class Board:
-
     def __init__(self, scale, level_number, window):
         self.size_of_one_field = int(100 * scale)
         self.board = []
         self.window = window
-        self.top_offset = player.Bar.get_height_of_bar(scale)
+        self.top_offset = player.Bar.get_height_of_bar()
         file = csv.reader(open('./levels/level_' + str(level_number) + '.csv'), delimiter=';')
 
         row_number = 0
@@ -39,11 +40,11 @@ class Board:
             row_number += 1
 
         if self.start_side == "l":
-            self.start_pos_x = -self.size_of_one_field//2
+            self.start_pos_x = -self.size_of_one_field // 2
             self.start_pos_y = self.size_of_one_field * start_y - self.size_of_one_field // 2 + self.top_offset
         elif self.start_side == "u":
             self.start_pos_x = self.size_of_one_field * start_x - self.size_of_one_field // 2
-            self.start_pos_y = -self.size_of_one_field//2 + self.top_offset
+            self.start_pos_y = -self.size_of_one_field // 2 + self.top_offset
         elif self.start_side == "r":
             self.start_pos_x = self.size_of_one_field * len(self.board[0]) + self.size_of_one_field // 2
             self.start_pos_y = self.start_pos_y = self.size_of_one_field * start_y - self.size_of_one_field // 2 + self.top_offset
@@ -57,7 +58,10 @@ class Board:
         return self.board[row][column]
 
     def get_field_at_x_y(self, x, y):
-        return self.board[int((y - self.top_offset)//self.size_of_one_field)][int(x//self.size_of_one_field)]
+        if 0 <= x <= pygame.display.get_window_size()[0] and player.Bar.get_height_of_bar() < y < pygame.display.get_window_size()[1] - shop.Shop.height:
+            return self.board[int((y - self.top_offset) // self.size_of_one_field)][int(x // self.size_of_one_field)]
+        else:
+            return None
 
     def get_board_width(self):
         return len(self.board[0])
@@ -69,10 +73,11 @@ class Board:
         for row in range(self.get_board_height()):
             for column in range(self.get_board_width()):
                 self.window.blit(self.get_field_at(row, column).get_image(),
-                            (self.size_of_one_field * column, self.size_of_one_field * row + self.top_offset))
+                                 (self.size_of_one_field * column, self.size_of_one_field * row + self.top_offset))
                 if (self.get_field_at(row, column).get_tower()):
-                    self.get_field_at(row, column).get_tower().render(self.window, self.size_of_one_field * column + self.size_of_one_field // 2, self.size_of_one_field * row + self.size_of_one_field // 2 + self.top_offset)
-
+                    self.get_field_at(row, column).get_tower().render(self.window,
+                                                                      self.size_of_one_field * column + self.size_of_one_field // 2,
+                                                                      self.size_of_one_field * row + self.size_of_one_field // 2 + self.top_offset)
 
     def get_size_of_one_field(self):
         return self.size_of_one_field
@@ -83,32 +88,36 @@ class Board:
         elif self.start_side == "u":
             return "d"
         elif self.start_side == "r":
-            return  "l"
+            return "l"
         elif self.start_side == "d":
             return "u"
 
     def add_tower_to_field(self, tower, row, column):
         self.board[row][column].place_tower(tower)
 
+    def remove_tower_from_field(self, row_column):
+        return self.board[row_column[0]][row_column[1]].remove_tower()
+
     def get_start_pos(self):
         return (self.start_pos_x, self.start_pos_y)
 
     def get_middle_of_field(self, row, column):
-        return (column * self.size_of_one_field + self.size_of_one_field // 2, row * self.size_of_one_field + self.size_of_one_field // 2 + self.top_offset)
+        return (column * self.size_of_one_field + self.size_of_one_field // 2,
+                row * self.size_of_one_field + self.size_of_one_field // 2 + self.top_offset)
 
     def get_middle_of_on_field_from_x_y(self, pos):
-        return (pos[0]  + self.top_offset //self.size_of_one_field*self.size_of_one_field+self.size_of_one_field/2, pos[1]  + self.top_offset //self.size_of_one_field*self.size_of_one_field+self.size_of_one_field/2)
+        return (
+        pos[0] + self.top_offset // self.size_of_one_field * self.size_of_one_field + self.size_of_one_field / 2,
+        pos[1] + self.top_offset // self.size_of_one_field * self.size_of_one_field + self.size_of_one_field / 2)
 
-    def get_row_and_column_from_x_y(self, x,y):
-        return int((y - self.top_offset)//self.size_of_one_field), int(x//self.size_of_one_field)
+    def get_row_and_column_from_x_y(self, x, y):
+        return int((y - self.top_offset) // self.size_of_one_field), int(x // self.size_of_one_field)
 
-    def check_if_placable(self, x,y):
-        try:
-            check_field = self.get_field_at_x_y(x,y)
-        except IndexError:
-            return False
-        
-        if not check_field.tower and not isinstance(check_field, field.Way_field):
+    def check_if_placable(self, x, y):
+
+        check_field = self.get_field_at_x_y(x, y)
+
+        if check_field and not check_field.tower and not isinstance(check_field, field.Way_field):
             return True
         else:
             return False
