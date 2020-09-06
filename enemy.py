@@ -257,7 +257,7 @@ class Enemy:
 
     def get_middle_of_current_field(self):
         size_of_fields = self.board.get_size_of_one_field()
-        return (self.pos_x // size_of_fields * size_of_fields + size_of_fields // 2, self.pos_y // size_of_fields * size_of_fields + size_of_fields // 2 + self.top_offset)
+        return (self.pos_x // size_of_fields * size_of_fields + size_of_fields // 2, (self.pos_y - self.top_offset) // size_of_fields * size_of_fields + size_of_fields // 2 + self.top_offset)
 
     def is_at_end(self):
         current_field = self.board.get_field_at_x_y(self.pos_x, self.pos_y)
@@ -272,11 +272,11 @@ class Enemy:
                 if self.pos_x < last_quarter:
                     return True
             if self.last_movement == "d":
-                last_quarter = self.pos_y // size_of_fields * size_of_fields + size_of_fields // 4 * 3
+                last_quarter = (self.pos_y + self.top_offset) // size_of_fields * size_of_fields + size_of_fields // 4 * 3
                 if self.pos_y > last_quarter:
                     return True
             if self.last_movement == "l":
-                last_quarter = self.pos_y // size_of_fields * size_of_fields + size_of_fields // 4 * 1
+                last_quarter = (self.pos_y + self.top_offset) // size_of_fields * size_of_fields + size_of_fields // 4 * 1
                 if self.pos_y < last_quarter:
                     return True
         return False
