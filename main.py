@@ -297,7 +297,7 @@ class Game(object):
         self.window.fill((0, 0, 0))
         self.current_player = player.Player()
         self.play_board = board.Board(self.scale, level_number, self.window)
-        self.enemy_manager = enemy.Enemy_manager(self.play_board, self.current_player, self.scale, self.window)
+        self.enemy_manager = enemy.EnemyManager(self.play_board, self.current_player, self.scale, self.window)
         self.wave_manager = enemy.WaveManager(self.enemy_manager)
         self.projectile_manager = projectile.Projectile_manager(self.enemy_manager, self.scale, self.window)
         self.tower_manager = tower.TowerManager(self.scale, self.enemy_manager, self.projectile_manager)

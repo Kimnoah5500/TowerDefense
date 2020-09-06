@@ -1,6 +1,5 @@
 import pygame
 import math
-import player as Player
 
 class Projectile_manager:
     def __init__(self, enemy_manager, scale, window):
