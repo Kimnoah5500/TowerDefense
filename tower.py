@@ -24,6 +24,12 @@ class TowerManager:
                     self.projectile_manager.new_projectile(tower.projectile_code, enemys_in_range[0].get_pos(), tower.get_pos(), enemys_in_range[0])
                     tower.shot_fired()
 
+    def get_range_from_tower_code(self, code):
+        if code == "bato":
+            return Basic_tower.range * self.scale
+        if code == "test" or code == "test2":
+            return 0
+
 class Tower:
     def __init__(self, scale, pos, range, enemy_manager, projectile_code, cooldown):
         self.size = int(scale * 80)
@@ -56,11 +62,15 @@ class Tower:
     def shot_fired(self):
         self.time_since_last_shot = 0
 
+    
+
 class Basic_tower(Tower):
+    range = 160
+
     def __init__(self, scale, pos, enemy_manager):
-        range = 160 * scale
         cooldown = 200
         projectile_code = "caba"
-        Tower.__init__(self, scale, pos, range, enemy_manager, projectile_code, cooldown)
+        Tower.__init__(self, scale, pos, self.range * scale, enemy_manager, projectile_code, cooldown)
         self.image = pygame.image.load('./ressources/Basic_tower.png')
         self.image = pygame.transform.scale(self.image, (int(scale * 60), int(scale * 80)))
+        

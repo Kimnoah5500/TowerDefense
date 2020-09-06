@@ -101,3 +101,14 @@ class Board:
 
     def get_row_and_column_from_x_y(self, x,y):
         return int((y - self.top_offset)//self.size_of_one_field), int(x//self.size_of_one_field)
+
+    def check_if_placable(self, x,y):
+        try:
+            check_field = self.get_field_at_x_y(x,y)
+        except IndexError:
+            return False
+        
+        if not check_field.tower and not isinstance(check_field, field.Way_field):
+            return True
+        else:
+            return False
