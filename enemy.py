@@ -5,6 +5,7 @@ from collections import deque
 
 class WaveManager:
     def __init__(self, enemy_manager):
+        self.endless_wave_count = 5
         self.setup_waves()
         self.endless_mode = False
         self.enemy_manager = enemy_manager
@@ -50,11 +51,14 @@ class WaveManager:
                     self.enemy_manager.new_enemy(self.endless_mode_wave.popleft())
                     self.time_since_last_spawn = 0
             else:
+                self.endless_wave_count *= 2
                 self.time_since_last_spawn = -9900
                 self.endless_mode_wave = deque(
                     ["ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba",
                      "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba",
-                     "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba"])
+                     "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba"])
+                for i in range(self.endless_wave_count):
+                    self.endless_mode_wave.append("ba")
 
     def set_endless_mode(self):
         self.endless_mode = True
