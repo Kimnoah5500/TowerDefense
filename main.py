@@ -430,8 +430,8 @@ class Game:
         self.projectile_manager = ProjectileManager(self.enemy_manager, self.scale, self.window)
         self.tower_manager = TowerManager(self.scale, self.enemy_manager, self.projectile_manager)
         self.bar = Bar(self.current_player, self.window, self.scale)
-        self.shop = Shop(0, self.play_board.get_board_height() * 100 * self.scale + Bar.get_height_of_bar(self.scale),
-                         self.play_board.get_board_width() * self.scale * 100, self.scale)
+        self.shop = Shop((self.play_board.get_board_width() * 100 * self.scale / 2) - 500 * self.scale, self.play_board.get_board_height() * 100 * self.scale + Bar.get_height_of_bar(self.scale),
+            self.scale, self.play_board.get_board_width() * 100 * self.scale )
 
         self.time = 0
 
