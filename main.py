@@ -122,10 +122,10 @@ class Game(object):
 
                 if not self.current_player.is_dead():
                     self.play_board.render()
+                    self.projectile_manager.manage()
                     self.enemy_manager.manage()
                     self.wave_manager.manage(time_difference)
                     self.tower_manager.manage(time_difference)
-                    self.projectile_manager.manage()
                     self.bar.render()
                     self.shop.render(self.window)
                     if drag:
@@ -144,6 +144,7 @@ class Game(object):
 
                 if right_click_menu:
                     pygame.draw.rect(self.window, (255, 0,0 ), right_click_menu.get_box())
+                    self.shop.draw_range(range_pos, self.window, range)
                     if right_click_menu.get_box().collidepoint(pygame.mouse.get_pos()):
                         right_click_menu.hovered = True
                     else:
@@ -177,6 +178,8 @@ class Game(object):
                             clicked_field = self.play_board.get_field_at_x_y(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
                             if clicked_field and clicked_field.get_tower():
                                 right_click_menu = button.Button("Verkaufen", pygame.font.Font('./ressources/Alata-Regular.ttf', 22 * self.scale), pygame.mouse.get_pos(), (158, 0, 0), self.window_size, self.window)
+                                range_pos = self.play_board.get_middle_of_field_from_x_y((pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]))
+                                range = clicked_field.get_tower().range
 
                     elif drag and event.type == pygame.MOUSEBUTTONUP:
                         drag = False
@@ -323,8 +326,8 @@ class Game(object):
         self.projectile_manager = projectile.Projectile_manager(self.enemy_manager, self.scale, self.window)
         self.tower_manager = tower.TowerManager(self.scale, self.enemy_manager, self.projectile_manager)
         self.bar = player.Bar(self.current_player, self.window, self.scale)
-        self.shop = shop.Shop(0, self.play_board.get_board_height() * 100 * self.scale + player.Bar.get_height_of_bar(),
-                              self.play_board.get_board_width() * self.scale * 100, self.scale)
+        self.shop = shop.Shop((self.play_board.get_board_width() * 100 * self.scale / 2) - 500 * self.scale, self.play_board.get_board_height() * 100 * self.scale + player.Bar.get_height_of_bar(),
+            self.scale, self.play_board.get_board_width() * 100 * self.scale )
         self.time = 0
 
     pygame.quit()

@@ -105,10 +105,10 @@ class Board:
         return (column * self.size_of_one_field + self.size_of_one_field // 2,
                 row * self.size_of_one_field + self.size_of_one_field // 2 + self.top_offset)
 
-    def get_middle_of_on_field_from_x_y(self, pos):
+    def get_middle_of_field_from_x_y(self, pos):
         return (
-        pos[0] + self.top_offset // self.size_of_one_field * self.size_of_one_field + self.size_of_one_field / 2,
-        pos[1] + self.top_offset // self.size_of_one_field * self.size_of_one_field + self.size_of_one_field / 2)
+        int(pos[0] // self.size_of_one_field * self.size_of_one_field + self.size_of_one_field / 2),
+        int((pos[1] - self.top_offset) // self.size_of_one_field * self.size_of_one_field + self.size_of_one_field / 2) + self.top_offset)
 
     def get_row_and_column_from_x_y(self, x, y):
         return int((y - self.top_offset) // self.size_of_one_field), int(x // self.size_of_one_field)

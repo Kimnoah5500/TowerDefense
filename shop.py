@@ -2,14 +2,14 @@ import pygame
 
 class Shop:
     height = 100
-    def __init__(self, x, y, width, scale):
+    def __init__(self, x, y, scale, window_with):
         self.scale = scale
         self.x = x
         self.y = y
-        self.width = width
+        self.width = 1000 * scale
         self.height = 100 * scale
         self.background_image = pygame.image.load('./ressources/interface/shop_background.png')
-        self.background_image = pygame.transform.scale(self.background_image, (self.width, self.height))
+        self.background_image = pygame.transform.scale(self.background_image, (window_with, self.height))
         self.background_image_2 = pygame.image.load('./ressources/interface/shop_background_2.png')
         self.background_image_2 = pygame.transform.scale(self.background_image_2, ((self.width - 200 * scale) // 10, self.height - 20 * scale))
         self.items = self.getItems()
@@ -19,7 +19,7 @@ class Shop:
 
     def render(self, window):
         font =  pygame.font.Font("./ressources/Alata-Regular.ttf",15)
-        window.blit(self.background_image, (self.x, self.y))
+        window.blit(self.background_image, (0, self.y))
         for i in range(0,10,2):
             window.blit(self.background_image_2, (self.x + self.width//10 * i  ,self.y + 10 * self.scale))
         for item in self.items:
@@ -36,28 +36,30 @@ class Shop:
             PriceRec = Price.get_rect(x = self.x + self.width//10 * (index*2 +1), y = self.y + 25)
             window.blit(Price, PriceRec)
 
-            Damage = font.render("Damage: "+str(self.item_damages[self.get_item_code(index)]), True, (48, 34, 18))
+            Damage = font.render("Dps: "+str(self.item_damages[self.get_item_code(index)]), True, (48, 34, 18))
             DamageRec = Damage.get_rect(x = self.x + self.width//10 * (index*2 +1), y = self.y + 40)
             window.blit(Damage, DamageRec)
             
 
     def getItems(self):
         basic_tower = pygame.image.load('./ressources/towers/Basic_tower.png')
-        test = pygame.image.load('./ressources/Test.png')
-        test2 = pygame.image.load('./ressources/Test.png')
-        return [basic_tower, test, test2]
+        sniper_tower = pygame.image.load('./ressources/towers/Sniper_tower.png')
+        flame_tower = pygame.image.load('./ressources/towers/Flame_tower.png')
+        ice_tower = pygame.image.load('./ressources/towers/Ice_tower.png')
+        ultimate_tower = pygame.image.load('./ressources/towers/Ultimate_tower.png')
+        return [basic_tower, sniper_tower, flame_tower, ice_tower, ultimate_tower]
 
     def get_prices(self):
-        return {"bato":200, "test":500, "test2":0}
+        return {"bato":200, "snto":600, "flto":800, "icto":600, "ulto":6000}
 
     def get_names(self):
-        return ["Basic Tower", "Test Tower", "Test Tower"]
+        return ["Basic Tower", "Sniper Tower", "Flame Tower", "Ice Tower", "Ultiamte Tower"]
 
     def get_damages(self):
-        return {"bato":20, "test":0, "test2":0}
+        return {"bato":100, "snto":20, "flto":400, "icto":80, "ulto":200}
 
     def get_item_code(self, index):
-        codes = ["bato", "test", "test2"]
+        codes = ["bato", "snto", "flto", "icto", "ulto"]
         return codes[index]
 
     def check_if_affordable(self, index, player):
@@ -94,5 +96,16 @@ class Shop:
 
         self.rect.center = pos
         window.blit(self.items[index], self.rect)
+
+    def draw_range(self, pos, window, range):
+        range_rect = pygame.Rect(0,0, range*2, range*2)
+        range_rect.center = pos
+        overlay = pygame.Surface((range * 2, range*2))
+        overlay.set_alpha(180)
+        overlay.fill((61, 61, 60))
+        window.blit(overlay, range_rect.topleft)
+
+        self.rect.center = pos
+
         
 
