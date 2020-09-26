@@ -9,7 +9,8 @@ class Board:
         self.size_of_one_field = int(100 * scale)
         self.board = []
         self.window = window
-        self.top_offset = player.Bar.get_height_of_bar()
+        self.scale = scale
+        self.top_offset = player.Bar.get_height_of_bar(scale)
         file = csv.reader(open('./levels/level_' + str(level_number) + '.csv'), delimiter=';')
 
         row_number = 0
@@ -24,19 +25,19 @@ class Board:
                 self.board.append([])
                 for cell in row:
                     if cell == "ey":
-                        self.board[row_number - 1].append(field.Empty_Field(self.size_of_one_field))
+                        self.board[row_number - 1].append(field.EmptyField(self.size_of_one_field))
                     elif cell == "sh":
-                        self.board[row_number - 1].append(field.Straight_way_field_hotizontal(self.size_of_one_field))
+                        self.board[row_number - 1].append(field.StraightPathFieldHorizontal(self.size_of_one_field))
                     elif cell == "sv":
-                        self.board[row_number - 1].append(field.Straight_way_field_vertikal(self.size_of_one_field))
+                        self.board[row_number - 1].append(field.StraightPathFieldVertical(self.size_of_one_field))
                     elif cell == "elu":
-                        self.board[row_number - 1].append(field.Edge_way_field_left_up(self.size_of_one_field))
+                        self.board[row_number - 1].append(field.EdgePathFieldLeftUp(self.size_of_one_field))
                     elif cell == "eld":
-                        self.board[row_number - 1].append(field.Edge_way_field_left_down(self.size_of_one_field))
+                        self.board[row_number - 1].append(field.EdgePathFieldLeftDown(self.size_of_one_field))
                     elif cell == "eru":
-                        self.board[row_number - 1].append(field.Edge_way_field_right_up(self.size_of_one_field))
+                        self.board[row_number - 1].append(field.EdgePathFieldRightUp(self.size_of_one_field))
                     elif cell == "erd":
-                        self.board[row_number - 1].append(field.Edge_way_field_right_down(self.size_of_one_field))
+                        self.board[row_number - 1].append(field.EdgePathFieldRightDown(self.size_of_one_field))
             row_number += 1
 
         if self.start_side == "l":
@@ -58,7 +59,7 @@ class Board:
         return self.board[row][column]
 
     def get_field_at_x_y(self, x, y):
-        if 0 <= x <= pygame.display.get_window_size()[0] and player.Bar.get_height_of_bar() < y < pygame.display.get_window_size()[1] - shop.Shop.height:
+        if 0 <= x <= pygame.display.get_window_size()[0] and player.Bar.get_height_of_bar(self.scale) < y < pygame.display.get_window_size()[1] - shop.Shop.height:
             return self.board[int((y - self.top_offset) // self.size_of_one_field)][int(x // self.size_of_one_field)]
         else:
             return None
@@ -105,10 +106,10 @@ class Board:
         return (column * self.size_of_one_field + self.size_of_one_field // 2,
                 row * self.size_of_one_field + self.size_of_one_field // 2 + self.top_offset)
 
-    def get_middle_of_on_field_from_x_y(self, pos):
+    def get_middle_of_one_field_from_x_y(self, pos):
         return (
-        pos[0] + self.top_offset // self.size_of_one_field * self.size_of_one_field + self.size_of_one_field / 2,
-        pos[1] + self.top_offset // self.size_of_one_field * self.size_of_one_field + self.size_of_one_field / 2)
+        int(pos[0] // self.size_of_one_field * self.size_of_one_field + self.size_of_one_field / 2),
+        int((pos[1] - self.top_offset) // self.size_of_one_field * self.size_of_one_field + self.size_of_one_field / 2) + self.top_offset)
 
     def get_row_and_column_from_x_y(self, x, y):
         return int((y - self.top_offset) // self.size_of_one_field), int(x // self.size_of_one_field)
@@ -117,7 +118,7 @@ class Board:
 
         check_field = self.get_field_at_x_y(x, y)
 
-        if check_field and not check_field.tower and not isinstance(check_field, field.Way_field):
+        if check_field and not check_field.tower and not isinstance(check_field, field.PathField):
             return True
         else:
             return False

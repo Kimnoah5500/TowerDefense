@@ -9,9 +9,9 @@ class Shop:
         self.width = width
         self.height = 100 * scale
         self.background_image = pygame.image.load('./ressources/interface/shop_background.png')
-        self.background_image = pygame.transform.scale(self.background_image, (self.width, self.height))
+        self.background_image = pygame.transform.scale(self.background_image, (int(self.width), int(self.height)))
         self.background_image_2 = pygame.image.load('./ressources/interface/shop_background_2.png')
-        self.background_image_2 = pygame.transform.scale(self.background_image_2, ((self.width - 200 * scale) // 10, self.height - 20 * scale))
+        self.background_image_2 = pygame.transform.scale(self.background_image_2, (int((self.width - 200 * scale) // 10), int(self.height - 20 * scale)))
         self.items = self.getItems()
         self.item_names = self.get_names()
         self.item_prices = self.get_prices()

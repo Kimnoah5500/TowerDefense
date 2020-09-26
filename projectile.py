@@ -1,8 +1,26 @@
 import pygame
 import math
 
-class Projectile_manager:
+from enemy import EnemyManager
+
+
+class ProjectileManager:
+    """Used to manage all projectiles that exist on the board and to create new ones.
+
+    Attributes:
+        scale (float): Designed to adjust the size of the game but never really used because pygame don't like resizing.
+        enemy_manager (EnemyManager): Object which manages the enemies that currently exist.
+        window (Surface): The surface all the projectiles should be drawn on.
+        projectiles (list): List of all projectiles currently traveling across the board.
+    """
     def __init__(self, enemy_manager, scale, window):
+        """Used to manage all projectiles that exist on the board and to create new ones.
+
+        Args:
+            enemy_manager (EnemyManager): Object which manages the enemies that currently exist.
+            scale (float):
+            window (Surface): The surface all the projectiles should be drawn on.
+        """
         self.scale = scale
         self.enemy_manager = enemy_manager
         self.window = window
@@ -11,7 +29,7 @@ class Projectile_manager:
     def new_projectile(self, code, target_pos, start_pos, target_enemy):
         if code == "caba":
             self.projectiles.append(Canon_ball(target_pos, start_pos, self.scale, target_enemy))
-        #TODO Add Projectile Codes here if there are any new
+        # TODO Add Projectile Codes here if there are any new
 
     def manage(self):
         for projectile in self.projectiles:
@@ -21,6 +39,7 @@ class Projectile_manager:
                 self.projectiles.remove(projectile)
             else:
                 projectile.render(self.window)
+
 
 class Projectile:
     def __init__(self, target_pos, start_pos, vel, target_enemy, damage, size, scale):
@@ -43,7 +62,8 @@ class Projectile:
         self.pos_y += self.movement_y
 
     def is_at_target_pos(self):
-        return self.target_pos[0] - self.vel < self.pos_x < self.target_pos[0] + self.vel and self.target_pos[1] - self.vel < self.pos_y < self.target_pos[1] + self.vel
+        return self.target_pos[0] - self.vel < self.pos_x < self.target_pos[0] + self.vel and self.target_pos[
+            1] - self.vel < self.pos_y < self.target_pos[1] + self.vel
 
     def render(self, window):
         window.blit(self.image, (self.pos_x - self.size // 2, self.pos_y - self.size // 2))
