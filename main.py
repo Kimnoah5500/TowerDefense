@@ -266,9 +266,9 @@ class Game:
                                                                            int(22 * self.scale)), (0, 0),
                                                           (158, 0, 0), self.window_size, self.window)
                                 right_click_menu.set_pos((
-                                    self.play_board.get_middle_of_one_field_from_x_y(pygame.mouse.get_pos())[
+                                    self.play_board.get_middle_of_field_from_x_y(pygame.mouse.get_pos())[
                                         0] - right_click_menu.get_box().width // 2,
-                                    self.play_board.get_middle_of_one_field_from_x_y(pygame.mouse.get_pos())[
+                                    self.play_board.get_middle_of_field_from_x_y(pygame.mouse.get_pos())[
                                         1] + self.play_board.get_size_of_one_field() // 2 - right_click_menu.get_box().height))
                                 range_pos = self.play_board.get_middle_of_field_from_x_y((pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]))
                                 range = clicked_field.get_tower().range
