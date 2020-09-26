@@ -202,10 +202,10 @@ class Game:
 
                 if not self.current_player.is_dead():
                     self.play_board.render()
+                    self.projectile_manager.manage()
                     self.enemy_manager.manage()
                     self.wave_manager.manage(time_difference)
                     self.tower_manager.manage(time_difference)
-                    self.projectile_manager.manage()
                     self.bar.render()
                     self.shop.render(self.window)
                     if drag:
@@ -223,7 +223,8 @@ class Game:
                     a_button.render()
 
                 if right_click_menu:
-                    pygame.draw.rect(self.window, (255, 0, 0), right_click_menu.get_box())
+                    pygame.draw.rect(self.window, (255, 0,0 ), right_click_menu.get_box())
+                    self.shop.draw_range(range_pos, self.window, range)
                     if right_click_menu.get_box().collidepoint(pygame.mouse.get_pos()):
                         right_click_menu.hovered = True
                     else:
@@ -269,6 +270,9 @@ class Game:
                                         0] - right_click_menu.get_box().width // 2,
                                     self.play_board.get_middle_of_one_field_from_x_y(pygame.mouse.get_pos())[
                                         1] + self.play_board.get_size_of_one_field() // 2 - right_click_menu.get_box().height))
+                                range_pos = self.play_board.get_middle_of_field_from_x_y((pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]))
+                                range = clicked_field.get_tower().range
+
                     elif drag and event.type == pygame.MOUSEBUTTONUP:
                         drag = False
                         if self.play_board.check_if_placable(event.pos[0], event.pos[1]) and self.shop.buy_item(index,
@@ -428,6 +432,7 @@ class Game:
         self.bar = Bar(self.current_player, self.window, self.scale)
         self.shop = Shop(0, self.play_board.get_board_height() * 100 * self.scale + Bar.get_height_of_bar(self.scale),
                          self.play_board.get_board_width() * self.scale * 100, self.scale)
+
         self.time = 0
 
 

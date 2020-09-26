@@ -17,6 +17,7 @@ class Player:
     def add_money(self, amount: int):
         """Adds money to players account balance.
 
+
         Args:
             amount (int): Amount of money to add.
 
