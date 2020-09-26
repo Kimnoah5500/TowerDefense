@@ -29,6 +29,7 @@ class Button:
 
     def set_pos(self, pos):
         self.pos = pos
+        self.box.topleft = pos
 
     def get_box(self):
         return self.box
