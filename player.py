@@ -2,7 +2,7 @@ import pygame
 
 class Player:
     health_points = 100
-    money = 200
+    money = 2000
 
     def add_money(self, amount):
         self.money += amount

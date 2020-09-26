@@ -11,13 +11,21 @@ class TowerManager:
         pos = (row_column[1] * size_of_one_field + size_of_one_field // 2, row_column[0] * size_of_one_field + size_of_one_field // 2 + top_offset)
         if code == "bato":
             new_tower = Basic_tower(self.scale, pos, self.enemy_manager)
+        if code == "snto":
+            new_tower = Sniper_tower(self.scale, pos, self.enemy_manager)
+        if code == "flto":
+            new_tower = Flame_tower(self.scale, pos, self.enemy_manager)
+        if code == "icto":
+            new_tower = Ice_tower(self.scale, pos, self.enemy_manager)
+        if code == "ulto":
+            new_tower = Ultimate_tower(self.scale, pos, self.enemy_manager)
         #TODO Add other Tower Codes here if there are any new
         self.towers.append(new_tower)
         return new_tower
 
     def remove_tower(self, tower):
         self.towers.remove(tower)
-        return tower.cost
+        return tower.resell_price
 
     def manage(self, time):
         for tower in self.towers:
@@ -31,15 +39,21 @@ class TowerManager:
     def get_range_from_tower_code(self, code):
         if code == "bato":
             return Basic_tower.range * self.scale
-        if code == "test" or code == "test2":
-            return 0
+        if code == "snto":
+            return Sniper_tower.range * self.scale
+        if code == "flto":
+            return Flame_tower.range * self.scale
+        if code == "icto":
+            return Ice_tower.range * self.scale
+        if code == "ulto":
+            return Ultimate_tower.range * self.scale
 
 class Tower:
-    def __init__(self, scale, pos, range, enemy_manager, projectile_code, cooldown, cost):
+    def __init__(self, scale, pos, range, enemy_manager, projectile_code, cooldown, resell_price):
         self.size = int(scale * 80)
         self.pos_x = pos[0]
         self.pos_y = pos[1]
-        self.cost = cost
+        self.resell_price = resell_price
         self.range = range
         self.enemy_manager = enemy_manager
         self.projectile_code = projectile_code
@@ -75,8 +89,52 @@ class Basic_tower(Tower):
     def __init__(self, scale, pos, enemy_manager):
         cooldown = 200
         projectile_code = "caba"
-        cost = 200
-        Tower.__init__(self, scale, pos, self.range * scale, enemy_manager, projectile_code, cooldown, cost)
+        resell_price = 100
+        Tower.__init__(self, scale, pos, self.range * scale, enemy_manager, projectile_code, cooldown, resell_price)
         self.image = pygame.image.load('./ressources/towers/Basic_tower.png')
+        self.image = pygame.transform.scale(self.image, (int(scale * 60), int(scale * 80)))
+
+class Sniper_tower(Tower):
+    range = 200
+
+    def __init__(self, scale, pos, enemy_manager):
+        cooldown = 1000
+        projectile_code = "bcba"
+        resell_price = 300
+        Tower.__init__(self, scale, pos, self.range * scale, enemy_manager, projectile_code, cooldown, resell_price)
+        self.image = pygame.image.load('./ressources/towers/Sniper_tower.png')
+        self.image = pygame.transform.scale(self.image, (int(scale * 60), int(scale * 80)))
+
+class Flame_tower(Tower):
+    range = 105
+
+    def __init__(self, scale, pos, enemy_manager):
+        cooldown = 50
+        projectile_code = "fipo"
+        resell_price = 400
+        Tower.__init__(self, scale, pos, self.range * scale, enemy_manager, projectile_code, cooldown, resell_price)
+        self.image = pygame.image.load('./ressources/towers/Flame_tower.png')
+        self.image = pygame.transform.scale(self.image, (int(scale * 60), int(scale * 80)))
+
+class Ice_tower(Tower):
+    range = 160
+
+    def __init__(self, scale, pos, enemy_manager):
+        cooldown = 250
+        projectile_code = "icpo"
+        resell_price = 300
+        Tower.__init__(self, scale, pos, self.range * scale, enemy_manager, projectile_code, cooldown, resell_price)
+        self.image = pygame.image.load('./ressources/towers/Ice_tower.png')
+        self.image = pygame.transform.scale(self.image, (int(scale * 60), int(scale * 80)))
+
+class Ultimate_tower(Tower):
+    range = 320
+
+    def __init__(self, scale, pos, enemy_manager):
+        cooldown = 100
+        projectile_code = "ulcb"
+        resell_price = 3000
+        Tower.__init__(self, scale, pos, self.range * scale, enemy_manager, projectile_code, cooldown, resell_price)
+        self.image = pygame.image.load('./ressources/towers/Ultimate_tower.png')
         self.image = pygame.transform.scale(self.image, (int(scale * 60), int(scale * 80)))
         
