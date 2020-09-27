@@ -72,8 +72,8 @@ class Game:
         self.help_font = pygame.font.Font("./ressources/Alata-Regular.ttf", int(20 * self.scale))
 
         self.window = pygame.display.set_mode(
-            (int(100 * self.scale * 10),
-             int(100 * self.scale * 5 + Bar.get_height_of_bar(self.scale) + 100 * self.scale)))
+            (int(100 * self.scale * 15),
+             int(100 * self.scale * 7 + Bar.get_height_of_bar(self.scale) + 100 * self.scale)))
         self.window_size = pygame.display.get_window_size()
 
         self.clock = pygame.time.Clock()
@@ -161,6 +161,9 @@ class Game:
                                        self.window, center=True)
                 buttons = [
                     Button("1", self.default_font, (400 * self.scale, 180 * self.scale), (48, 34, 18), self.window_size, self.window),
+                    Button("2", self.default_font, (460 * self.scale, 180 * self.scale), (48, 34, 18), self.window_size, self.window),
+                    Button("3", self.default_font, (520 * self.scale, 180 * self.scale), (48, 34, 18), self.window_size, self.window),
+                    Button("4", self.default_font, (580 * self.scale, 180 * self.scale), (48, 34, 18), self.window_size, self.window),
                     Button("Zurück", self.default_font, (10 * self.scale, 0), (48, 34, 18), self.window_size,
                            self.window, bottom=True)]
 

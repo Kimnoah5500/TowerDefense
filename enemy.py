@@ -366,7 +366,7 @@ class Balloon(Enemy):
     def __init__(self, scale, board, start_pos):
         health_points = 100
         damage = 1
-        vel = 5 * scale
+        vel = 4 * scale
         money_value = 40
         resistances = []
         weaknesses = [damage_types.DamageTypes.ultimate]
@@ -377,8 +377,8 @@ class Balloon(Enemy):
 class Green_balloon(Enemy):
     def __init__(self, scale, board, start_pos):
         health_points = 500
-        damage = 10
-        vel = 3 * scale
+        damage = 5
+        vel = 2 * scale
         money_value = 100
         resistances = []
         weaknesses = [damage_types.DamageTypes.ultimate]
@@ -389,8 +389,8 @@ class Green_balloon(Enemy):
 class Blue_balloon(Enemy):
     def __init__(self, scale, board, start_pos):
         health_points = 1000
-        damage = 5
-        vel = 4 * scale
+        damage = 10
+        vel = 3 * scale
         money_value = 200
         resistances = [damage_types.DamageTypes.ice]
         weaknesses = [damage_types.DamageTypes.fire]
@@ -404,8 +404,8 @@ class Yellow_balloon(Enemy):
     def __init__(self, scale, board, start_pos):
         health_points = 1500
         damage = 20
-        vel = 5 * scale
-        money_value = 300
+        vel = 4 * scale
+        money_value = 400
         resistances = [damage_types.DamageTypes.fire]
         weaknesses = [damage_types.DamageTypes.ice]
         Enemy.__init__(self, board, scale, start_pos, health_points, money_value, damage, weaknesses, resistances, vel)
@@ -416,9 +416,9 @@ class Boss_balloon(Enemy):
     def __init__(self, scale, board, start_pos):
         health_points = 10000
         damage = 100
-        vel = 2 * scale
+        vel = 1 * scale
         money_value = 20000
-        resistances = [damage_types.DamageTypes.fire, damage_types.DamageTypes.ice, damage_types.DamageTypes.normal]
+        resistances = [damage_types.DamageTypes.normal]
         weaknesses = [damage_types.DamageTypes.ultimate]
         Enemy.__init__(self, board, scale, start_pos, health_points, money_value, damage, weaknesses, resistances, vel)
         self.image = pygame.image.load('./ressources/enemys/Enemy_balloon.png')
