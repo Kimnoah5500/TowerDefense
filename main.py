@@ -330,6 +330,7 @@ class Game:
                                     run = False
 
             elif self.state == "Game_pause":
+                self.clock.tick()
                 self.bar.set_buttons([Button("Fortsetzen", self.default_font,
                                              (self.window_size[0] // 4 - 20 * self.scale, 0), (48, 34, 18),
                                              self.window_size, self.window),
