@@ -95,10 +95,10 @@ class Basic_tower(Tower):
         self.image = pygame.transform.scale(self.image, (int(scale * 60), int(scale * 80)))
 
 class Sniper_tower(Tower):
-    range = 200
+    range = 240
 
     def __init__(self, scale, pos, enemy_manager):
-        cooldown = 1000
+        cooldown = 500
         projectile_code = "bcba"
         resell_price = 300
         Tower.__init__(self, scale, pos, self.range * scale, enemy_manager, projectile_code, cooldown, resell_price)
@@ -111,18 +111,18 @@ class Flame_tower(Tower):
     def __init__(self, scale, pos, enemy_manager):
         cooldown = 50
         projectile_code = "fipo"
-        resell_price = 400
+        resell_price = 450
         Tower.__init__(self, scale, pos, self.range * scale, enemy_manager, projectile_code, cooldown, resell_price)
         self.image = pygame.image.load('./ressources/towers/Flame_tower.png')
         self.image = pygame.transform.scale(self.image, (int(scale * 60), int(scale * 80)))
 
 class Ice_tower(Tower):
-    range = 160
+    range = 200
 
     def __init__(self, scale, pos, enemy_manager):
         cooldown = 250
         projectile_code = "icpo"
-        resell_price = 300
+        resell_price = 750
         Tower.__init__(self, scale, pos, self.range * scale, enemy_manager, projectile_code, cooldown, resell_price)
         self.image = pygame.image.load('./ressources/towers/Ice_tower.png')
         self.image = pygame.transform.scale(self.image, (int(scale * 60), int(scale * 80)))

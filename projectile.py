@@ -88,28 +88,28 @@ class Canon_ball(Projectile):
 class Big_canon_ball(Projectile):
     def __init__(self, target_pos, start_pos, scale, target_enemy):
         vel = 20 * scale
-        damage = 100
+        damage = 200
         Projectile.__init__(self, target_pos, start_pos, vel, target_enemy, damage, damage_types.DamageTypes.normal, 10, scale)
         self.image = pygame.image.load('./ressources/projectiles/Cannon_Ball.png')
         self.image = pygame.transform.scale(self.image, (int(10 * scale), int(10 * scale)))
 class Fire_projectile(Projectile):
     def __init__(self, target_pos, start_pos, scale, target_enemy):
         vel = 20 * scale
-        damage = 20
+        damage = 25
         Projectile.__init__(self, target_pos, start_pos, vel, target_enemy, damage, damage_types.DamageTypes.fire, 10, scale)
         self.image = pygame.image.load('./ressources/projectiles/Cannon_Ball.png')
         self.image = pygame.transform.scale(self.image, (int(10 * scale), int(10 * scale)))
 class Ice_projectile(Projectile):
     def __init__(self, target_pos, start_pos, scale, target_enemy):
         vel = 20 * scale
-        damage = 20
+        damage = 200
         Projectile.__init__(self, target_pos, start_pos, vel, target_enemy, damage, damage_types.DamageTypes.ice, 10, scale)
         self.image = pygame.image.load('./ressources/projectiles/Cannon_Ball.png')
         self.image = pygame.transform.scale(self.image, (int(10 * scale), int(10 * scale)))
 class Ultimate_canon_ball(Projectile):
     def __init__(self, target_pos, start_pos, scale, target_enemy):
         vel = 20 * scale
-        damage = 100
+        damage = 150
         Projectile.__init__(self, target_pos, start_pos, vel, target_enemy, damage, damage_types.DamageTypes.ultimate, 15, scale)
         self.image = pygame.image.load('./ressources/projectiles/Cannon_Ball.png')
         self.image = pygame.transform.scale(self.image, (int(15 * scale), int(15 * scale)))

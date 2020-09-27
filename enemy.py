@@ -19,11 +19,11 @@ class WaveManager:
         self.second_wave = deque(["ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba"])
         self.third_wave = deque(
             ["ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba",
-             "ba", "ba", "ba", "ba"])
-        self.forth_wave = deque(["blb","blb","blb","blb","blb"])
-        self.fifth_wave = deque(["grb","grb","grb"])
-        self.sixth_wave = deque(["yeb","yeb","yeb"])
-        self.seventh_wave = deque(["bob","bob"])
+             "ba", "ba", "ba", "ba","grb","grb","grb","grb"])
+        self.forth_wave = deque(["grb","grb","grb","grb","grb","grb","grb","grb","grb","grb","grb","grb","grb","blb","blb"])
+        self.fifth_wave = deque(["grb","grb","grb","grb","blb","blb","blb","blb","blb","blb","blb","yeb"])
+        self.sixth_wave = deque(["yeb","yeb","yeb","yeb","yeb"])
+        self.seventh_wave = deque(["ba","ba","ba","grb","grb","grb","blb","blb","blb","yeb","yeb","yeb","yeb","yeb","bob"])
         self.endless_mode_wave = deque(
             ["ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba",
              "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba",
@@ -43,27 +43,27 @@ class WaveManager:
                     if self.time_since_last_spawn > 800:
                         self.enemy_manager.new_enemy(self.second_wave.popleft())
                         self.time_since_last_spawn = 0
-            elif 40000 > self.time > 30000:
+            elif 50000 > self.time > 30000:
                 if self.third_wave:
                     if self.time_since_last_spawn > 800:
                         self.enemy_manager.new_enemy(self.third_wave.popleft())
                         self.time_since_last_spawn = 0
-            elif 50000 > self.time > 40000:
+            elif 70000 > self.time > 50000:
                 if self.forth_wave:
                     if self.time_since_last_spawn > 800:
                         self.enemy_manager.new_enemy(self.forth_wave.popleft())
                         self.time_since_last_spawn = 0
-            elif 60000 > self.time > 50000:
+            elif 90000 > self.time > 70000:
                 if self.fifth_wave:
                     if self.time_since_last_spawn > 800:
                         self.enemy_manager.new_enemy(self.fifth_wave.popleft())
                         self.time_since_last_spawn = 0
-            elif 70000 > self.time > 60000:
+            elif 100000 > self.time > 90000:
                 if self.sixth_wave:
                     if self.time_since_last_spawn > 800:
                         self.enemy_manager.new_enemy(self.sixth_wave.popleft())
                         self.time_since_last_spawn = 0
-            elif self.time > 70000:
+            elif self.time > 100000:
                 if self.seventh_wave:
                     if self.time_since_last_spawn > 400:
                         self.enemy_manager.new_enemy(self.seventh_wave.popleft())
@@ -84,6 +84,14 @@ class WaveManager:
                      "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba", "ba"])
                 for i in range(self.endless_wave_count):
                     self.endless_mode_wave.append("ba")
+                for i in range(self.endless_wave_count //2):
+                    self.endless_mode_wave.append("grb")
+                for i in range(self.endless_wave_count //3):
+                    self.endless_mode_wave.append("blb")
+                for i in range(self.endless_wave_count //4):
+                    self.endless_mode_wave.append("yeb")
+                for i in range(self.endless_wave_count //10):
+                    self.endless_mode_wave.append("bob")
 
     def set_endless_mode(self):
         self.endless_mode = True
@@ -366,7 +374,7 @@ class Balloon(Enemy):
     def __init__(self, scale, board, start_pos):
         health_points = 100
         damage = 1
-        vel = 5 * scale
+        vel = 4 * scale
         money_value = 40
         resistances = []
         weaknesses = [damage_types.DamageTypes.ultimate]
@@ -377,25 +385,25 @@ class Balloon(Enemy):
 class Green_balloon(Enemy):
     def __init__(self, scale, board, start_pos):
         health_points = 500
-        damage = 10
-        vel = 3 * scale
+        damage = 5
+        vel = 2 * scale
         money_value = 100
         resistances = []
         weaknesses = [damage_types.DamageTypes.ultimate]
         Enemy.__init__(self, board, scale, start_pos, health_points, money_value, damage, weaknesses, resistances, vel)
-        self.image = pygame.image.load('./ressources/enemys/Enemy_balloon.png')
+        self.image = pygame.image.load('./ressources/enemys/Enemy_balloon_green.png')
         self.image = pygame.transform.scale(self.image, (int(scale * 60), int(scale * 60)))
 
 class Blue_balloon(Enemy):
     def __init__(self, scale, board, start_pos):
         health_points = 1000
-        damage = 5
-        vel = 4 * scale
+        damage = 10
+        vel = 3 * scale
         money_value = 200
         resistances = [damage_types.DamageTypes.ice]
         weaknesses = [damage_types.DamageTypes.fire]
         Enemy.__init__(self, board, scale, start_pos, health_points, money_value, damage, weaknesses, resistances, vel)
-        self.image = pygame.image.load('./ressources/enemys/Enemy_balloon.png')
+        self.image = pygame.image.load('./ressources/enemys/Enemy_balloon_blue.png')
         self.image = pygame.transform.scale(self.image, (int(scale * 60), int(scale * 60)))
 
 
@@ -404,22 +412,22 @@ class Yellow_balloon(Enemy):
     def __init__(self, scale, board, start_pos):
         health_points = 1500
         damage = 20
-        vel = 5 * scale
-        money_value = 300
+        vel = 4 * scale
+        money_value = 400
         resistances = [damage_types.DamageTypes.fire]
         weaknesses = [damage_types.DamageTypes.ice]
         Enemy.__init__(self, board, scale, start_pos, health_points, money_value, damage, weaknesses, resistances, vel)
-        self.image = pygame.image.load('./ressources/enemys/Enemy_balloon.png')
+        self.image = pygame.image.load('./ressources/enemys/Enemy_balloon_yellow.png')
         self.image = pygame.transform.scale(self.image, (int(scale * 60), int(scale * 60)))
         
 class Boss_balloon(Enemy):
     def __init__(self, scale, board, start_pos):
         health_points = 10000
         damage = 100
-        vel = 2 * scale
-        money_value = 20000
-        resistances = [damage_types.DamageTypes.fire, damage_types.DamageTypes.ice, damage_types.DamageTypes.normal]
+        vel = 1 * scale
+        money_value = 10000
+        resistances = [damage_types.DamageTypes.normal]
         weaknesses = [damage_types.DamageTypes.ultimate]
         Enemy.__init__(self, board, scale, start_pos, health_points, money_value, damage, weaknesses, resistances, vel)
-        self.image = pygame.image.load('./ressources/enemys/Enemy_balloon.png')
+        self.image = pygame.image.load('./ressources/enemys/Enemy_balloon_purple.png')
         self.image = pygame.transform.scale(self.image, (int(scale * 60), int(scale * 60)))
