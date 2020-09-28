@@ -261,8 +261,7 @@ class Game:
                                 else:
                                     right_click_menu = None
                         elif event.button == 3:
-                            clicked_field = self.play_board.get_field_at_x_y(pygame.mouse.get_pos()[0],
-                                                                             pygame.mouse.get_pos()[1])
+                            clicked_field = self.play_board.get_field_at_x_y(pygame.mouse.get_pos())
                             if clicked_field and clicked_field.get_tower():
                                 right_click_menu = Button("Verkaufen",
                                                           pygame.font.Font('./ressources/Alata-Regular.ttf',
@@ -278,8 +277,8 @@ class Game:
 
                     elif drag and event.type == pygame.MOUSEBUTTONUP:
                         drag = False
-                        if self.play_board.check_if_placable(event.pos[0], event.pos[1]) and self.shop.buy_item(index,
-                                                                                                                self.current_player):
+                        if self.play_board.check_if_placeable(event.pos[0], event.pos[1]) and self.shop.buy_item(index,
+                                                                                                                 self.current_player):
                             row, column = self.play_board.get_row_and_column_from_x_y(event.pos[0], event.pos[1])
                             self.play_board.add_tower_to_field(
                                 self.tower_manager.add_tower(self.shop.get_item_code(index), (row, column),
@@ -434,8 +433,8 @@ class Game:
         self.projectile_manager = ProjectileManager(self.enemy_manager, self.scale, self.window)
         self.tower_manager = TowerManager(self.scale, self.enemy_manager, self.projectile_manager)
         self.bar = Bar(self.current_player, self.window, self.scale)
-        self.shop = Shop((self.play_board.get_board_width() * 100 * self.scale / 2) - 500 * self.scale, self.play_board.get_board_height() * 100 * self.scale + Bar.get_height_of_bar(self.scale),
-            self.scale, self.play_board.get_board_width() * 100 * self.scale )
+        self.shop = Shop((self.play_board.get_board_size()[0] * 100 * self.scale / 2) - 500 * self.scale, self.play_board.get_board_size()[1] * 100 * self.scale + Bar.get_height_of_bar(self.scale),
+            self.scale, self.play_board.get_board_size()[0] * 100 * self.scale )
 
         self.time = 0
 
