@@ -142,11 +142,7 @@ class Board:
                 self.window.blit(self.get_field_at(row, column).get_image(),
                                  (self.size_of_one_field * column, self.size_of_one_field * row + self.top_offset))
                 if self.get_field_at(row, column).get_tower():
-                    self.get_field_at(row, column).get_tower().render(self.window,
-                                                                      self.size_of_one_field * column +
-                                                                      self.size_of_one_field // 2,
-                                                                      self.size_of_one_field * row +
-                                                                      self.size_of_one_field // 2 + self.top_offset)
+                    self.get_field_at(row, column).get_tower().render(self.window)
 
     def get_size_of_one_field(self) -> int:
         """Returns the side length of one of the square fields.
