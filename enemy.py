@@ -720,15 +720,14 @@ class WaveManager:
         Author:
             Kim Matt
         """
-        wave_file = open("./misc/waves")
         self.waves = []
         wave_number = 0
-        for line in wave_file:
-            self.waves.append(deque())
-            for enemy in line.split(","):
-                self.waves[wave_number].append(enemy.strip())
-            wave_number += 1
-        wave_file.close()
+        with open("./misc/waves") as wave_file:
+            for line in wave_file:
+                self.waves.append(deque())
+                for enemy in line.split(","):
+                    self.waves[wave_number].append(enemy.strip())
+                wave_number += 1
 
     def manage(self, time_difference: int):
         """Manages the spawning of new enemies.
