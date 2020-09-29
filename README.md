@@ -10,7 +10,7 @@ Ziel für den Spieler ist es eine bestimmte Anzahl von Wellen zu überstehen ohn
 Es wird vorgefertigte Level mit unterschiedlichen Karten und Wegen für die Gegner geben, ein Level Editor zum erstellen eigener Karten ist nicht geplant.
 Auch eine hübsche Grafik ist mangels Grafiker Kenntnisse bei uns nicht zu erwarten.
 
-## Zielplatform
+## Zielplattform
 Auf Windows 10 und MacOS entwickelt. Generell ausführbar auf allen Systemen die Python-Programme laufen lassen können (keine Garantie abseits Windows und MacOS).
 
 ## Liste der einzelnen Module
