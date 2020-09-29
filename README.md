@@ -1,6 +1,6 @@
-#Dokumentation
+# Dokumentation
 
-##Projekt-Beschreibung
+## Projekt-Beschreibung
 Entwickelt wird ein Tower Defense spiel mit Python, bei diesem Spiel wandern Gegner entlang eines vorgegebenen Wegs, der Spieler hat die Möglichkeit sogenannte "Tower" zu bauen die auf die Gegner schießen.
 Dabei gibt es verschiedene Gegner sowie auch verschiedene Tower mit unterschiedlichen Lebenspunkten bzw Stärken.
 Die Tower kann der Spieler frei auf dem Spielfeld platzieren nachdem er diese gekauft hat und diese nach dem Platzieren mit Upgrades ausstatten.
@@ -10,10 +10,10 @@ Ziel für den Spieler ist es eine bestimmte Anzahl von Wellen zu überstehen ohn
 Es wird vorgefertigte Level mit unterschiedlichen Karten und Wegen für die Gegner geben, ein Level Editor zum erstellen eigener Karten ist nicht geplant.
 Auch eine hübsche Grafik ist mangels Grafiker Kenntnisse bei uns nicht zu erwarten.
 
-##Zielplatform
+## Zielplatform
 Auf Windows 10 und MacOS entwickelt. Generell ausführbar auf allen Systemen die Python-Programme laufen lassen können (keine Garantie abseits Windows und MacOS).
 
-##Liste der einzelnen Module
+## Liste der einzelnen Module
 * board
   * Beinhaltet und verwaltet das Spielfeld 
 * button
@@ -39,10 +39,10 @@ Auf Windows 10 und MacOS entwickelt. Generell ausführbar auf allen Systemen die
   
 *Für eine genauere Beschreibung der Klassen und deren Funktionen verweisen wir auf die ausfürhliche Dokumentation des gesamten Codes.*
 
-##Abhängigkeiten
+## Abhängigkeiten
 Zur Verwendung des Projekts wird die aktuelste dev-version von pygame benötigt, diese kann mithilfe des Befehls `pip install --upgrade pygame --pre` installiert werden.
 
-##Erziehltes Resultat
+## Erziehltes Resultat
 Bis auf eine Anforderung wurden alle Spezifikationen erfüllt. 
 
 Was aufgrund der Zeit leider nicht mehr möglich war zu implementieren, ist eine Upgradefunktion für die einzelnen Türme.
