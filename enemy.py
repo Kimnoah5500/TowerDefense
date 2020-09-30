@@ -613,7 +613,6 @@ class EnemyManager:
             Kim Matt
             Moritz Nueske
         """
-        print(enemy_code)
         if enemy_code == "ba":
             self.enemies.append(BaseEnemy(self.scale, self.board, self.start_pos))
         if enemy_code == "blb":
