@@ -49,6 +49,7 @@ Was aufgrund der Zeit leider nicht mehr möglich war zu implementieren, ist eine
 Einmal platzierte Türme lassen sich also nur noch wieder verkaufen, nicht mehr verbessern.
 
 *Im Spiel selbst steht eine Hilfe-Seite zur verfügung die nochmals das Spiel mitsamt den Regeln und Funktionen erklärt*
+*Btw. das Scrollrad kann man hier zum durchblättern benutzen ;)*
 
 Auch bekannt ist, das an manchen wenigen stellen nicht nach dem "Pythonic way of Coding" programmiert wurde, zur Behebung davon würden nochmals ca. 1-2 Tage an Programmierarbeit anfallen.
 
