@@ -1,0 +1,24 @@
+60, 180
+Help_main_menu,322,377
+350,5
+#Das Hauptmenü
+Wenn Sie das Spiel gestartet haben oder an einer beliebigen stelle im Spiel den Button "Hauptmenü" gedrückt
+haben, landen sie im Hauptmenü.
+Hier finden Sie die drei Buttons die Sie auf der Abbildung auf der linken Seite rot markiert sehen. Wählen Sie
+einen der Buttons und klicken Sie mit der Maus auf diesen um folgende Funktionen auszuführen:
+
+#Spiel starten
+Mit dem Button "Spiel starten" gelangen Sie ihrem Ziel eine Runde Tower Defense zu spielen einen Schritt näher.
+Sie galangen mit diesem Button zur Auswahl der verschiedenen vorgerfertigten Level, Details zur Auswahl der
+Level finden sie auf der nächsten Seite der Hilfestellungen.
+
+#Hilfe
+Die Hilfe scheinen Sie bereits gefunden zu haben, sonst könnten Sie diesen Text wohl oder übel nicht sehen.
+In der Hilfestellung finden Sie Anleitungen, Tips und Tricks zu allen Dingen die Ihnen im Spiel begegnen
+können. Die Hilfestellungen erstrecken sich über mehrere Seiten die jeweils ein Thema behandeln. Um zum
+vorherigen oder zum nächsten Thema zu springen finden Sie an der linken und rechten Seite der Hilfe-
+stellungen jeweils einen Button um nach vorherigen oder zur nächsten Seite zu springen.
+
+#Beenden
+Der Button "Beenden" beendet das Spiel und schließt das Fenster, genau den gleichen Effekt erziehlen Sie mit
+dem roten "X" am oberen Rand des Spiels um das Spiel jederzeit zu beenden.

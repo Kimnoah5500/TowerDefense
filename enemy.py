@@ -209,7 +209,7 @@ class Enemy:
         else:
             return False
 
-    def is_over_middle_in_y_direction(self):
+    def is_over_middle_in_y_direction(self) -> bool:
         """Checks whether the enemy is over the middle of the field in vertical directions.
 
         Returns:
@@ -235,10 +235,7 @@ class Enemy:
         Author:
             Kim Matt
         """
-        size_of_fields = self.board.get_size_of_one_field()
-        return (self.pos[0] // size_of_fields * size_of_fields + size_of_fields // 2, (
-                self.pos[
-                    1] - self.top_offset) // size_of_fields * size_of_fields + size_of_fields // 2 + self.top_offset)
+        return self.board.get_middle_of_field_from_x_y(tuple(self.pos))
 
     def is_at_end(self) -> bool:
         """Checks whether the enemy is at the end of the course.
@@ -397,7 +394,7 @@ class BaseEnemy(Enemy):
         self.image = pygame.transform.scale(self.image, (int(scale * 60), int(scale * 60)))
 
 
-class Green_balloon(Enemy):
+class GreenBalloon(Enemy):
     """This enemy has many life points but is slower than other enemies.
 
     Attributes:
@@ -441,7 +438,7 @@ class Green_balloon(Enemy):
         self.image = pygame.transform.scale(self.image, (int(scale * 60), int(scale * 60)))
 
 
-class Blue_balloon(Enemy):
+class BlueBalloon(Enemy):
     """This enemy is resistant to ice projectiles but is more vulnerable against fire projectiles.
 
     Attributes:
@@ -485,7 +482,7 @@ class Blue_balloon(Enemy):
         self.image = pygame.transform.scale(self.image, (int(scale * 60), int(scale * 60)))
 
 
-class Yellow_balloon(Enemy):
+class YellowBalloon(Enemy):
     """This enemy is resistant to fire projectiles but is more vulnerable against ice projectiles.
 
     Attributes:
@@ -529,7 +526,7 @@ class Yellow_balloon(Enemy):
         self.image = pygame.transform.scale(self.image, (int(scale * 60), int(scale * 60)))
 
 
-class Boss_balloon(Enemy):
+class BossBalloon(Enemy):
     """The strongest enemy of all.
 
     Attributes:
@@ -564,7 +561,7 @@ class Boss_balloon(Enemy):
         """
         health_points = 10000
         damage = 100
-        vel = 1 * scale
+        vel = 3 * scale
         money_value = 10000
         resistances = [DamageTypes.normal]
         weaknesses = [DamageTypes.ultimate]
@@ -616,16 +613,17 @@ class EnemyManager:
             Kim Matt
             Moritz Nueske
         """
+        print(enemy_code)
         if enemy_code == "ba":
             self.enemies.append(BaseEnemy(self.scale, self.board, self.start_pos))
         if enemy_code == "blb":
-            self.enemies.append(Blue_balloon(self.scale, self.board, self.start_pos))
+            self.enemies.append(BlueBalloon(self.scale, self.board, self.start_pos))
         if enemy_code == "grb":
-            self.enemies.append(Green_balloon(self.scale, self.board, self.start_pos))
+            self.enemies.append(GreenBalloon(self.scale, self.board, self.start_pos))
         if enemy_code == "yeb":
-            self.enemies.append(Yellow_balloon(self.scale, self.board, self.start_pos))
+            self.enemies.append(YellowBalloon(self.scale, self.board, self.start_pos))
         if enemy_code == "bob":
-            self.enemies.append(Boss_balloon(self.scale, self.board, self.start_pos))
+            self.enemies.append(BossBalloon(self.scale, self.board, self.start_pos))
 
     def hit_enemy(self, enemy: Enemy, damage: int, damage_type: DamageTypes):
         """Inflicts damage to the given enemy.
@@ -720,14 +718,14 @@ class WaveManager:
         Author:
             Kim Matt
         """
-        wave_file = open("./misc/waves")
         self.waves = []
         wave_number = 0
-        for line in wave_file:
-            self.waves.append(deque())
-            for enemy in line.split(","):
-                self.waves[wave_number].append(enemy.strip())
-            wave_number += 1
+        with open("./misc/waves") as wave_file:
+            for line in wave_file:
+                self.waves.append(deque())
+                for enemy in line.split(","):
+                    self.waves[wave_number].append(enemy.strip())
+                wave_number += 1
         wave_file.close()
 
     def manage(self, time_difference: int):
@@ -742,37 +740,37 @@ class WaveManager:
         self.time_since_last_spawn += time_difference
         if not self.endless_mode:
             self.time += time_difference
-            if 20000 > self.time > 10000:
+            if 30000 > self.time > 10000:
                 if self.waves[0]:
                     if self.time_since_last_spawn > 1000:
                         self.enemy_manager.new_enemy(self.waves[0].popleft())
                         self.time_since_last_spawn = 0
-            elif 30000 > self.time > 20000:
+            elif 60000 > self.time > 30000:
                 if self.waves[1]:
                     if self.time_since_last_spawn > 800:
                         self.enemy_manager.new_enemy(self.waves[1].popleft())
                         self.time_since_last_spawn = 0
-            elif 50000 > self.time > 30000:
+            elif 90000 > self.time > 60000:
                 if self.waves[2]:
                     if self.time_since_last_spawn > 800:
                         self.enemy_manager.new_enemy(self.waves[2].popleft())
                         self.time_since_last_spawn = 0
-            elif 70000 > self.time > 50000:
+            elif 120000 > self.time > 90000:
                 if self.waves[3]:
                     if self.time_since_last_spawn > 800:
                         self.enemy_manager.new_enemy(self.waves[3].popleft())
                         self.time_since_last_spawn = 0
-            elif 90000 > self.time > 70000:
+            elif 150000 > self.time > 120000:
                 if self.waves[4]:
                     if self.time_since_last_spawn > 800:
                         self.enemy_manager.new_enemy(self.waves[4].popleft())
                         self.time_since_last_spawn = 0
-            elif 100000 > self.time > 90000:
+            elif 180000 > self.time > 150000:
                 if self.waves[5]:
                     if self.time_since_last_spawn > 800:
                         self.enemy_manager.new_enemy(self.waves[5].popleft())
                         self.time_since_last_spawn = 0
-            elif self.time > 100000:
+            elif self.time > 180000:
                 if self.waves[6]:
                     if self.time_since_last_spawn > 400:
                         self.enemy_manager.new_enemy(self.waves[6].popleft())

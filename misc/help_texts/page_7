@@ -1,0 +1,13 @@
+280,5
+Help_game_over,800,448
+60,380
+#Game Over Menü
+Wenn Sie die Gegner nicht aufhalten konnten und zu viele den Weg bis zum Ende gegangen sind, verlieren Sie Lebenspunkte. Haben
+Sie alle Ihre Lebenspunkte verloren sehen Sie diesen Bildschirm, dass bedeutet, dass Sie leider verloren haben. Hier stehen
+Ihnen drei Buttons zur Verfügung:
+
+#Neu starten
+Startet das Level mit der gleichen Karte neu.
+
+#Hauptmenü                                           Beenden
+Bringt Sie zurück ins Hauptmenü.                                     Beendet das Spiel.

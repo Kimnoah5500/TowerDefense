@@ -1,5 +1,6 @@
 import pygame
 import math
+import random
 
 from damage_types import DamageTypes
 from pygame.surface import Surface
@@ -19,7 +20,7 @@ class ProjectileManager:
         Moritz Nueske
     """
 
-    def __init__(self, enemy_manager, scale: float, window: Surface):
+    def __init__(self, enemy_manager, scale: float, window: Surface, easter_egg_mode: bool = False):
         """Used to manage all projectiles that exist on the board and to create new ones.
 
         Args:
@@ -33,6 +34,7 @@ class ProjectileManager:
         self.scale = scale
         self.enemy_manager = enemy_manager
         self.window = window
+        self.easter_egg_mode = easter_egg_mode
         self.projectiles = []
 
     def new_projectile(self, code: str, target_pos: tuple, start_pos: tuple, target_enemy):
@@ -48,16 +50,19 @@ class ProjectileManager:
             Kim Matt
             Moritz Nueske
         """
-        if code == "caba":
-            self.projectiles.append(CanonBall(target_pos, start_pos, self.scale, target_enemy))
-        if code == "bcba":
-            self.projectiles.append(BigCanonBall(target_pos, start_pos, self.scale, target_enemy))
-        if code == "fipo":
-            self.projectiles.append(FireProjectile(target_pos, start_pos, self.scale, target_enemy))
-        if code == "icpo":
-            self.projectiles.append(IceProjectile(target_pos, start_pos, self.scale, target_enemy))
-        if code == "ulcb":
-            self.projectiles.append(UltimateCanonBall(target_pos, start_pos, self.scale, target_enemy))
+        if self.easter_egg_mode:
+            self.projectiles.append(EasterEggProjectile(target_pos, start_pos, self.scale, target_enemy))
+        else:
+            if code == "caba":
+                self.projectiles.append(CanonBall(target_pos, start_pos, self.scale, target_enemy))
+            if code == "bcba":
+                self.projectiles.append(BigCanonBall(target_pos, start_pos, self.scale, target_enemy))
+            if code == "fipo":
+                self.projectiles.append(FireProjectile(target_pos, start_pos, self.scale, target_enemy))
+            if code == "icpo":
+                self.projectiles.append(IceProjectile(target_pos, start_pos, self.scale, target_enemy))
+            if code == "ulcb":
+                self.projectiles.append(UltimateCanonBall(target_pos, start_pos, self.scale, target_enemy))
         # TODO Add Projectile Codes here if there are any new
 
     def manage(self):
@@ -333,3 +338,41 @@ class UltimateCanonBall(Projectile):
                             15, scale)
         self.image = pygame.image.load('./ressources/projectiles/Cannon_Ball.png')
         self.image = pygame.transform.scale(self.image, (int(15 * scale), int(15 * scale)))
+
+class EasterEggProjectile(Projectile):
+    """Easter Egg Canon Ball, just for fun.
+
+        Attributes:
+            vel (int): Speed with which the projectile flies over the board.
+            size (int): Size of the projectile.
+            target_enemy (Enemy): The enemy to be hit by the projectile.
+            damage (int): The damage that the projectile causes to the enemy.
+            damage_type (DamageTypes): The type of damage caused to the opponent.
+            move_direction (tuple): The direction in which the projectile is flying per tick.
+            pos (tuple): The current position of the projectile.
+            target_pos (tuple): The target to which the projectile is flying.
+            image (Surface): Image of the projectile.
+
+        Author:
+            Kim Matt
+        """
+
+    def __init__(self, target_pos: tuple, start_pos: tuple, scale: float, target_enemy):
+        """Easter Egg Canon Ball, just for fun.
+
+        Args:
+            target_pos (tuple): The target to which the projectile is flying.
+            start_pos (tuple): The position the projectile starts from.
+            scale (float): The scale in which the game gets rendered.
+            target_enemy (Enemy): The enemy to be hit by the projectile.
+
+        Author:
+            Moritz Nueske
+        """
+        vel = 10
+        damage = 20
+        Projectile.__init__(self, target_pos, start_pos, vel, target_enemy, damage, DamageTypes.ultimate,
+                            15, scale)
+        self.image = pygame.image.load('./misc/help_pictures/Help_easter_egg.png')
+        self.image = pygame.transform.scale(self.image, (int(30 * scale), int(30 * scale)))
+        self.image = pygame.transform.rotate(self.image, random.randint(-180, 180))

@@ -1,0 +1,12 @@
+280,5
+Help_game_win,800,448
+60,380
+#Gewonnen Menü
+Sie haben es geschafft! Sie haben alle Gegner aufgehalten, gut gemacht. Nun stehen Ihnen folgende Möglichkeiten offen:
+
+#Endlosmodus
+Im Endlosmodus können Sie da weiter machen wo Sie waren bevor Sie gewonnen haben, Sie behalten alle Ihre Türme und Ihr Geld.
+Im Endlosmodus kommen immer größere Wellen an Gegnern auf Sie zu, wie lange halten Sie das aus?
+
+#Hauptmenü                                           Beenden
+Bringt Sie zurück ins Hauptmenü.                                     Beendet das Spiel.

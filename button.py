@@ -23,7 +23,7 @@ class Button:
     hovered = False
 
     def __init__(self, text: str, font: Font, pos: tuple, hover_color: tuple, window_size: tuple, window: Surface,
-                 center: bool = False, bottom: bool = False):
+                 horizontal_center: bool = False, vertical_center: bool = False, bottom: bool = False, left: bool = False, right: bool = False, rotation: int = 0):
         """Creates a button with hover effect.
 
         Args:
@@ -33,7 +33,7 @@ class Button:
             hover_color (tuple): The color in which the button should be rendered when the mouse hovers over it.
             window_size (tuple): The size of the window for placing the button int he center or at the bottom.
             window (Surface): The surface on which the button should be rendered.
-            center (bool): Centers the button horizontally, default: False.
+            horizontal_center (bool): Centers the button horizontally, default: False.
             bottom (bool): Places the button at the bottom of the window, default: False.
 
         Author:
@@ -46,13 +46,29 @@ class Button:
         self.hover_color = hover_color
 
         self.pos = pos
-        if center:
+
+        if rotation != 0:
+            self.text_box = pygame.transform.rotate(self.text_box, rotation)
+
+        if horizontal_center:
             pos_list = list(self.pos)
             pos_list[0] = window_size[0] // 2 - self.text_box.get_rect().width // 2
             self.pos = tuple(pos_list)
-        elif bottom:
+        elif right:
+            pos_list = list(self.pos)
+            pos_list[0] = window_size[0] - self.text_box.get_rect().width - self.font.get_height() // 2
+            self.pos = tuple(pos_list)
+        elif left:
+            pos_list = list(self.pos)
+            pos_list[0] = 0 + self.font.get_height() // 2
+            self.pos = tuple(pos_list)
+        if bottom:
             pos_list = list(self.pos)
             pos_list[1] = window_size[1] - self.text_box.get_rect().height
+            self.pos = tuple(pos_list)
+        elif vertical_center:
+            pos_list = list(self.pos)
+            pos_list[1] = window_size[1] // 2 - self.text_box.get_rect().height // 2
             self.pos = tuple(pos_list)
 
         self.box = self.text_box.get_rect()

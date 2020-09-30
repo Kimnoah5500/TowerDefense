@@ -1,0 +1,13 @@
+280,5
+Help_game_interface,800,448
+60,380
+#Die Overfläche des Spiels (Fortsetzung)
+#Münzenanzeige (Roter Kasten)
+In der rechten oberen Ecke finden Sie die Anzahl Ihrer Münzen mit welchen Sie Türme kaufen können.
+
+#Laden (Gelber Kasten)
+Am unteren Rand finden Sie den Laden in welchem Sie mit Ihren Münzen Türme um sich zu verteidigen kaufen können. Um einen Turm
+zu kaufen klicken Sie mit der linken Maustaste auf diesen und halten Sie diese gedrückt, ziehen Sie nun den Turm an die gewünschte
+Position auf der Karte, lassen Sie dort die Maustaste los. Während des Ziehens sehen Sie anhand des grauen Kastens wie weit der
+Turm feuern kann. Merken Sie das Sie diesen Turm doch nicht kaufen möchten, ziehen Sie diesen einfach wieder in den Laden und
+lassen Sie dort die Maustaste los. Weiter Infos zu den Türmen finden Sie auf eine der nächsten Seiten.

@@ -1,5 +1,7 @@
 import pygame
+import random
 from tower import Tower
+
 
 class Field:
     """Class with basic attributes from fields which holds the tower on the specific field.
@@ -65,7 +67,7 @@ class Field:
         """
         return self.end_block
 
-    def place_tower(self, tower: Tower):
+    def place_tower(self, tower: Tower, size):
         """Places a tower onto this field.
 
         Args:
@@ -74,6 +76,8 @@ class Field:
         Author:
             Kim Matt
         """
+        self.image = pygame.image.load('./ressources/fields/Empty_5.png')
+        self.image = pygame.transform.scale(self.image, (size, size))
         self.tower = tower
 
     def remove_tower(self) -> Tower:
@@ -148,7 +152,13 @@ class StraightPathFieldHorizontal(PathField):
             Kim Matt
         """
         PathField.__init__(self, size)
-        self.image = pygame.image.load('./ressources/fields/Path_straight.png')
+        field_selector = random.randint(1, 3)
+        if field_selector == 1:
+            self.image = pygame.image.load('./ressources/fields/Path_straight_1.png')
+        elif field_selector == 2:
+            self.image = pygame.image.load('./ressources/fields/Path_straight_2.png')
+        else:
+            self.image = pygame.image.load('./ressources/fields/Path_straight_3.png')
         self.image = pygame.transform.scale(self.image, (size, size))
         self.field_code = "sh"
 
@@ -176,7 +186,13 @@ class StraightPathFieldVertical(PathField):
             Kim Matt
         """
         PathField.__init__(self, size)
-        self.image = pygame.image.load('./ressources/fields/Path_straight.png')
+        field_selector = random.randint(1, 3)
+        if field_selector == 1:
+            self.image = pygame.image.load('./ressources/fields/Path_straight_1.png')
+        elif field_selector == 2:
+            self.image = pygame.image.load('./ressources/fields/Path_straight_2.png')
+        else:
+            self.image = pygame.image.load('./ressources/fields/Path_straight_3.png')
         self.image = pygame.transform.scale(self.image, (size, size))
         self.image = pygame.transform.rotate(self.image, 90)
         self.field_code = "sv"
@@ -205,7 +221,13 @@ class EdgePathFieldLeftUp(PathField):
             Kim Matt
         """
         PathField.__init__(self, size)
-        self.image = pygame.image.load('./ressources/fields/Path_edge.png')
+        field_selector = random.randint(1, 3)
+        if field_selector == 1:
+            self.image = pygame.image.load('./ressources/fields/Path_edge_1.png')
+        elif field_selector == 2:
+            self.image = pygame.image.load('./ressources/fields/Path_edge_2.png')
+        else:
+            self.image = pygame.image.load('./ressources/fields/Path_edge_3.png')
         self.image = pygame.transform.scale(self.image, (size, size))
         self.field_code = "elu"
 
@@ -233,7 +255,13 @@ class EdgePathFieldRightUp(PathField):
             Kim Matt
         """
         PathField.__init__(self, size)
-        self.image = pygame.image.load('./ressources/fields/Path_edge.png')
+        field_selector = random.randint(1, 3)
+        if field_selector == 1:
+            self.image = pygame.image.load('./ressources/fields/Path_edge_1.png')
+        elif field_selector == 2:
+            self.image = pygame.image.load('./ressources/fields/Path_edge_2.png')
+        else:
+            self.image = pygame.image.load('./ressources/fields/Path_edge_3.png')
         self.image = pygame.transform.scale(self.image, (size, size))
         self.image = pygame.transform.rotate(self.image, 270)
         self.field_code = "eru"
@@ -262,7 +290,13 @@ class EdgePathFieldLeftDown(PathField):
             Kim Matt
         """
         PathField.__init__(self, size)
-        self.image = pygame.image.load('./ressources/fields/Path_edge.png')
+        field_selector = random.randint(1, 3)
+        if field_selector == 1:
+            self.image = pygame.image.load('./ressources/fields/Path_edge_1.png')
+        elif field_selector == 2:
+            self.image = pygame.image.load('./ressources/fields/Path_edge_2.png')
+        else:
+            self.image = pygame.image.load('./ressources/fields/Path_edge_3.png')
         self.image = pygame.transform.scale(self.image, (size, size))
         self.image = pygame.transform.rotate(self.image, 90)
         self.field_code = "eld"
@@ -291,7 +325,8 @@ class EdgePathFieldRightDown(PathField):
             Kim Matt
         """
         PathField.__init__(self, size)
-        self.image = pygame.image.load('./ressources/fields/Path_edge.png')
+        field_selector = random.randint(1, 3)
+        self.image = pygame.image.load('./ressources/fields/Path_edge_' + str(field_selector) + '.png')
         self.image = pygame.transform.scale(self.image, (size, size))
         self.image = pygame.transform.rotate(self.image, 180)
         self.field_code = "erd"
@@ -320,6 +355,7 @@ class EmptyField(Field):
             Kim Matt
         """
         Field.__init__(self, size)
-        self.image = pygame.image.load('./ressources/fields/Field_empty.png')
+        field_selector = random.randint(1, 5)
+        self.image = pygame.image.load('./ressources/fields/Empty_' + str(field_selector) + '.png')
         self.image = pygame.transform.scale(self.image, (size, size))
         self.field_code = "ey"
