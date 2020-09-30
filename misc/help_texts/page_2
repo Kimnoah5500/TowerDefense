@@ -1,0 +1,13 @@
+280,5
+Help_game_interface,800,448
+60,380
+#Die Overfläche des Spiels
+Wenn Sie ein Spiel gestertet haben finden sie sich auf einer leeren Karte, weitere Details dazu in den folgenden Seiten.
+Auf dieser Seite soll es primär um die Oberfläche des Spiels gehen, folgende Elemente finden Sie um die Karte herum:
+
+#Lebensanzeige (Blauer Kasten)
+Die Lebensanzeige befindet sich in der linken oberen Ecke und gibt an wie viele Lebenspunkte Sie noch haben, zu Beginn einer
+Runde haben sie 100 Lebenspunkte, über die Runde verlieren Sie diese wenn Gegner den Pfad ungehindert durchdringen, fällt der
+Wert Ihrer Lebenspunkte auf null haben Sie verloren.
+
+Fortsetzung nächste Seite...

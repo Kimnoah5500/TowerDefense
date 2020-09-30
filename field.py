@@ -67,7 +67,7 @@ class Field:
         """
         return self.end_block
 
-    def place_tower(self, tower: Tower):
+    def place_tower(self, tower: Tower, size):
         """Places a tower onto this field.
 
         Args:
@@ -76,6 +76,8 @@ class Field:
         Author:
             Kim Matt
         """
+        self.image = pygame.image.load('./ressources/fields/Empty_5.png')
+        self.image = pygame.transform.scale(self.image, (size, size))
         self.tower = tower
 
     def remove_tower(self) -> Tower:
@@ -324,12 +326,7 @@ class EdgePathFieldRightDown(PathField):
         """
         PathField.__init__(self, size)
         field_selector = random.randint(1, 3)
-        if field_selector == 1:
-            self.image = pygame.image.load('./ressources/fields/Path_edge_1.png')
-        elif field_selector == 2:
-            self.image = pygame.image.load('./ressources/fields/Path_edge_2.png')
-        else:
-            self.image = pygame.image.load('./ressources/fields/Path_edge_3.png')
+        self.image = pygame.image.load('./ressources/fields/Path_edge_' + str(field_selector) + '.png')
         self.image = pygame.transform.scale(self.image, (size, size))
         self.image = pygame.transform.rotate(self.image, 180)
         self.field_code = "erd"
@@ -358,6 +355,7 @@ class EmptyField(Field):
             Kim Matt
         """
         Field.__init__(self, size)
-        self.image = pygame.image.load('./ressources/fields/Field_empty.png')
+        field_selector = random.randint(1, 5)
+        self.image = pygame.image.load('./ressources/fields/Empty_' + str(field_selector) + '.png')
         self.image = pygame.transform.scale(self.image, (size, size))
         self.field_code = "ey"

@@ -1,0 +1,17 @@
+140,5
+Help_pause_menu,1200,282
+60,240
+#Pause Menü
+Wenn sie während eines laufenden Spiels auf den "Pause" Button, in der Darstellung oben rot umkreist, wird das gesamte
+Spielgeschehen eingefroren und die Gegner bewegen sich nicht weiter. In der Leiste am oberen Bildschirmrand sehen Sie nun
+folgende drei Buttons:
+
+#Fortsetzen (Blauer Kasten)
+Bei drücken auf "Fortsetzen" läuft das Spiel weiter und die Gegner setzen Ihren Weg fort.
+
+#Hauptmenü (Gelber Kasten)
+Dieser Button bringt Sie direkt zurück zum Hauptmenü falls Sie doch eine andere Karte Spielen wollen oder sich diese Hilfe
+nochmals durchlesen wollen.
+
+#Beenden (Pinker Kasten)
+Das Drücken dieses Buttons führt dazu, dass sich das Spiel schließt.

@@ -1,7 +1,6 @@
 import csv
 
 from pygame.surface import Surface
-
 from field import *
 from field import PathField
 from player import Bar
@@ -40,7 +39,7 @@ class Board:
         self.board = []
         self.window = window
         self.top_offset = int(Bar.get_height_of_bar(scale))
-        file = csv.reader(open('./levels/level_' + str(level_number) + '.csv'), delimiter=';')
+        file = csv.reader(open('./levels/level_' + level_number + '.csv'), delimiter=';')
 
         row_number = 0
         for row in file:
@@ -184,7 +183,7 @@ class Board:
         Author:
             Kim Matt
         """
-        self.board[row][column].place_tower(tower)
+        self.board[row][column].place_tower(tower, self.size_of_one_field)
 
     def remove_tower_from_field(self, row_column: tuple) -> Tower:
         """Remove the tower from the field with given row and column.

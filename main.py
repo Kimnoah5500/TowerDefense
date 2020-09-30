@@ -10,7 +10,9 @@ from shop import Shop
 from tower import TowerManager
 from button import Button
 from text_box import Text_box
-
+from pygame.surface import Surface
+from pygame.time import Clock
+from pygame.font import Font
 
 class Game:
     """Class which provides functions for running and controlling the game.
@@ -46,15 +48,15 @@ class Game:
         Kim Matt
         Moritz Nueske
     """
-    current_player = None
-    play_board = None
-    enemy_manager = None
-    projectile_manager = None
-    tower_manager = None
-    wave_manager = None
-    shop = None
-    bar = None
-    selected_level = None
+    current_player: Player = None
+    play_board: Board = None
+    enemy_manager: EnemyManager = None
+    projectile_manager: ProjectileManager = None
+    tower_manager: TowerManager = None
+    wave_manager: WaveManager = None
+    shop: Shop = None
+    bar: Bar = None
+    selected_level: int = None
 
     def __init__(self):
         """Object that holds all relevant data for the game and is used for running the game.
@@ -62,21 +64,21 @@ class Game:
         Author:
             Kim Matt
         """
-        self.scale = 0.8
-        self.state = "Menu"
+        self.scale: float = 0.8
+        self.state: str = "Menu"
 
         pygame.init()
         pygame.display.set_caption("Tower Defense")
         pygame.font.init()
-        self.default_font = pygame.font.Font("./ressources/Alata-Regular.ttf", int(30 * self.scale))
-        self.help_font = pygame.font.Font("./ressources/Alata-Regular.ttf", int(20 * self.scale))
+        self.default_font: Font = pygame.font.Font("./ressources/Alata-Regular.ttf", int(30 * self.scale))
+        self.help_font: Font = pygame.font.Font("./ressources/Alata-Regular.ttf", int(20 * self.scale))
 
-        self.window = pygame.display.set_mode(
+        self.window: Surface = pygame.display.set_mode(
             (int(100 * self.scale * 15),
              int(100 * self.scale * 7 + Bar.get_height_of_bar(self.scale) + 100 * self.scale)))
-        self.window_size = pygame.display.get_window_size()
+        self.window_size: tuple = pygame.display.get_window_size()
 
-        self.clock = pygame.time.Clock()
+        self.clock: Clock = pygame.time.Clock()
 
     def run(self):
         """Runs the game in a continuous loop till the player ends the game. Cycles through the different game states.
@@ -85,19 +87,26 @@ class Game:
             Kim Matt
             Moritz Nueske
         """
-        drag = False
+        drag: bool = False
         right_click_menu = None
-        run = True
+        run: bool = True
+        help_text_position = (0, 0)
+        help_text: list = []
+        help_image = None
+        help_image_position = (0, 0)
+        help_page_index: int = 0
+        last_help_page_index: int = -1
+        easter_egg_mode = False
 
         while run:
             if self.state == "Menu":
                 self.window.fill((84, 59, 31))
-                buttons = [Button("Spiel starten", self.default_font, (0, 200 * self.scale), (48, 34, 18), self.window_size,
-                                  self.window, center=True),
-                           Button("Hilfe", self.default_font, (0, 250 * self.scale), (48, 34, 18), self.window_size,
-                                  self.window, center=True),
-                           Button("Beenden", self.default_font, (0, 300 * self.scale), (48, 34, 18), self.window_size,
-                                  self.window, center=True)]
+                buttons = [Button("Spiel starten", self.default_font, (0, 250 * self.scale), (48, 34, 18), self.window_size,
+                                  self.window, horizontal_center=True),
+                           Button("Hilfe", self.default_font, (0, 320 * self.scale), (48, 34, 18), self.window_size,
+                                  self.window, horizontal_center=True),
+                           Button("Beenden", self.default_font, (0, 390 * self.scale), (48, 34, 18), self.window_size,
+                                  self.window, horizontal_center=True)]
 
                 for a_button in buttons:
                     if a_button.get_box().collidepoint(pygame.mouse.get_pos()):
@@ -127,12 +136,31 @@ class Game:
                                     run = False
             elif self.state == "Help":
                 self.window.fill((84, 59, 31))
-                test = Text_box(["Lorem ipsum dolor sit amet, consectetur adipiscing elit.", "Suspendisse porttitor sodales rutrum. Nullam ultrices neque id diam commodo, eu rhoncus magna feugiat. In hac habitasse platea dictumst. Maecenas eros turpis, tincidunt efficitur felis vel, rutrum varius arcu. Fusce quis magna quis leo ultricies semper. Sed finibus, mi non venenatis mattis, nulla ipsum sollicitudin tellus, vitae convallis nisl arcu quis tortor. Ut non eros ut felis euismod convallis.."], self.help_font, (0,0), self.window_size, self.window)
+
+                if last_help_page_index != help_page_index:
+                    help_text_file = open("./misc/help_texts/page_" + str(help_page_index))
+                    help_text = []
+                    help_image_position = help_text_file.readline().strip().split(",")
+                    help_image_position = (int(help_image_position[0]), int(help_image_position[1]))
+                    help_image_line = help_text_file.readline().split(",")
+                    help_image = pygame.image.load('./misc/help_pictures/' + help_image_line[0] + '.png')
+                    help_image = pygame.transform.scale(help_image, (int(int(help_image_line[1].strip()) * self.scale), int(int(help_image_line[2].strip()) * self.scale)))
+                    help_text_position = help_text_file.readline().strip().split(",")
+                    help_text_position = (int(help_text_position[0]), int(help_text_position[1]))
+                    for line in help_text_file:
+                        help_text.append(line.strip())
+                    last_help_page_index = help_page_index
+                self.window.blit(help_image, help_image_position)
+                help_text_box = Text_box(help_text, self.help_font, help_text_position, self.window_size, self.window, heading_font=self.default_font)
                 buttons = [
+                    Button("Nächste Seite", self.default_font, (10 * self.scale, 0), (48, 34, 18), self.window_size,
+                           self.window, right=True, vertical_center=True, rotation=-90),
+                    Button("Vorherige Seite", self.default_font, (10 * self.scale, 0), (48, 34, 18), self.window_size,
+                           self.window, left=True, vertical_center=True, rotation=90),
                     Button("Zurück", self.default_font, (10 * self.scale, 0), (48, 34, 18), self.window_size,
                            self.window, bottom=True)]
 
-                test.render()
+                help_text_box.render()
                 for a_button in buttons:
                     if a_button.get_box().collidepoint(pygame.mouse.get_pos()):
                         a_button.hovered = True
@@ -149,21 +177,43 @@ class Game:
                     elif event.type == pygame.KEYDOWN:
                         if pygame.key.get_pressed()[pygame.K_ESCAPE]:
                             run = False
-                    elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                        pos = pygame.mouse.get_pos()
-                        for a_button in buttons:
-                            if a_button.get_box().collidepoint(pos):
-                                if a_button.get_text() == "Zurück":
-                                    self.state = "Menu"
+                    elif event.type == pygame.MOUSEBUTTONDOWN:
+                        if event.button == 1:
+                            pos = pygame.mouse.get_pos()
+                            for a_button in buttons:
+                                if a_button.get_box().collidepoint(pos):
+                                    if a_button.get_text() == "Zurück":
+                                        self.state = "Menu"
+                                    elif a_button.get_text() == "Nächste Seite":
+                                        help_page_index += 1
+                                        if help_page_index > 10:
+                                            help_page_index = 0
+                                    elif a_button.get_text() == "Vorherige Seite":
+                                        help_page_index -= 1
+                                        if help_page_index < 0:
+                                            help_page_index = 10
+                        elif event.button == 4:
+                            help_page_index -= 1
+                            if help_page_index < 0:
+                                help_page_index = 11
+                            if help_page_index == 11:
+                                easter_egg_mode = not easter_egg_mode
+                        elif event.button == 5:
+                            help_page_index += 1
+                            if help_page_index == 11:
+                                easter_egg_mode = not easter_egg_mode
+                            if help_page_index > 11:
+                                help_page_index = 0
+
             elif self.state == "Level_picker":
                 self.window.fill((84, 59, 31))
                 text_levels = Text_box("Bitte Level wählen", self.default_font, (0, 140 * self.scale), self.window_size,
                                        self.window, center=True)
                 buttons = [
-                    Button("1", self.default_font, (400 * self.scale, 180 * self.scale), (48, 34, 18), self.window_size, self.window),
-                    Button("2", self.default_font, (460 * self.scale, 180 * self.scale), (48, 34, 18), self.window_size, self.window),
-                    Button("3", self.default_font, (520 * self.scale, 180 * self.scale), (48, 34, 18), self.window_size, self.window),
-                    Button("4", self.default_font, (580 * self.scale, 180 * self.scale), (48, 34, 18), self.window_size, self.window),
+                    Button("1", self.default_font, (400 * self.scale, 200 * self.scale), (48, 34, 18), self.window_size, self.window),
+                    Button("2", self.default_font, (620 * self.scale, 200 * self.scale), (48, 34, 18), self.window_size, self.window),
+                    Button("3", self.default_font, (840 * self.scale, 200 * self.scale), (48, 34, 18), self.window_size, self.window),
+                    Button("4", self.default_font, (1080 * self.scale, 200 * self.scale), (48, 34, 18), self.window_size, self.window),
                     Button("Zurück", self.default_font, (10 * self.scale, 0), (48, 34, 18), self.window_size,
                            self.window, bottom=True)]
 
@@ -194,12 +244,12 @@ class Game:
                                     self.selected_level = a_button.get_text()
                                     self.state = "Start_game"
             elif self.state == "Start_game":
-                self.start_level(self.selected_level)
+                self.start_level(self.selected_level, easter_egg_mode=easter_egg_mode)
                 self.clock.tick()
                 self.state = "Game"
             elif self.state == "Game":
                 self.bar.set_buttons([Button("II", self.default_font, (0, 0), (48, 34, 18),
-                                             pygame.display.get_window_size(), self.window, center=True)])
+                                             pygame.display.get_window_size(), self.window, horizontal_center=True)])
 
                 time_difference = self.clock.tick()
 
@@ -294,12 +344,12 @@ class Game:
                                           self.window, center=True)
                 buttons = [
                     Button("Endlosmodus", self.default_font, (0, self.window_size[1] // 2 - 40 * self.scale),
-                           (60, 133, 50), self.window_size, self.window, center=True),
+                           (60, 133, 50), self.window_size, self.window, horizontal_center=True),
                     Button("Hauptmenü", self.default_font,
                            (0, self.window_size[1] // 2 + 10 * self.scale), (60, 133, 50), self.window_size,
-                           self.window, center=True),
+                           self.window, horizontal_center=True),
                     Button("Beenden", self.default_font, (0, self.window_size[1] // 2 + 60 * self.scale),
-                           (60, 133, 50), self.window_size, self.window, center=True)]
+                           (60, 133, 50), self.window_size, self.window, horizontal_center=True)]
 
                 game_over_text.render()
                 for a_button in buttons:
@@ -337,7 +387,7 @@ class Game:
                                              (self.window_size[0] // 4 - 20 * self.scale, 0), (48, 34, 18),
                                              self.window_size, self.window),
                                       Button("Hauptmenü", self.default_font, (0, 0), (48, 34, 18),
-                                             self.window_size, self.window, center=True),
+                                             self.window_size, self.window, horizontal_center=True),
                                       Button("Beenden", self.default_font,
                                              (self.window_size[0] // 4 * 3 - 100 * self.scale, 0),
                                              (48, 34, 18),
@@ -380,12 +430,12 @@ class Game:
                                           (0, self.window_size[1] // 2 - 120 * self.scale), self.window_size,
                                           self.window, center=True)
                 buttons = [Button("Neustart", self.default_font, (0, self.window_size[1] // 2 - 40 * self.scale),
-                                  (158, 0, 0), self.window_size, self.window, center=True),
+                                  (158, 0, 0), self.window_size, self.window, horizontal_center=True),
                            Button("Hauptmenü", self.default_font,
                                   (0, self.window_size[1] // 2 + 10 * self.scale), (158, 0, 0), self.window_size,
-                                  self.window, center=True),
+                                  self.window, horizontal_center=True),
                            Button("Beenden", self.default_font, (0, self.window_size[1] // 2 + 60 * self.scale),
-                                  (158, 0, 0), self.window_size, self.window, center=True)]
+                                  (158, 0, 0), self.window_size, self.window, horizontal_center=True)]
 
                 game_over_text.render()
                 for a_button in buttons:
@@ -416,7 +466,7 @@ class Game:
                                 elif a_button.get_text() == "Beenden":
                                     run = False
 
-    def start_level(self, level_number: int):
+    def start_level(self, level_number: str, easter_egg_mode: bool = False):
         """Sets up all the managers and utilities for running a specific level.
 
         Args:
@@ -430,7 +480,7 @@ class Game:
         self.play_board = Board(self.scale, level_number, self.window)
         self.enemy_manager = EnemyManager(self.play_board, self.current_player, self.scale, self.window)
         self.wave_manager = WaveManager(self.enemy_manager)
-        self.projectile_manager = ProjectileManager(self.enemy_manager, self.scale, self.window)
+        self.projectile_manager = ProjectileManager(self.enemy_manager, self.scale, self.window, easter_egg_mode)
         self.tower_manager = TowerManager(self.scale, self.enemy_manager, self.projectile_manager)
         self.bar = Bar(self.current_player, self.window, self.scale)
         self.shop = Shop((self.play_board.get_board_size()[0] * 100 * self.scale / 2) - 500 * self.scale, self.play_board.get_board_size()[1] * 100 * self.scale + Bar.get_height_of_bar(self.scale),

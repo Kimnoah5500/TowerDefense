@@ -1,0 +1,12 @@
+280,5
+Help_game_objective,800,448
+60,380
+#Ablauf und Ziel des Spiels
+Wenn Sie ein Level gestartet haben dauert es zehn Sekunden, bis sich die ersten Gegner auf den Weg machen. In dieser Zeit
+sollten Sie mit Ihrem Startguthaben bereits Türme aufstellen um sich gegen die Gegner zu verteidigen. Die Gegner laufen den
+mit gelben Pfeilen gekennzeichneten Weg entlang, erreichen Sie die Zone welche mit einem roten Kasten gekennzeichnet ist,
+verlieren Sie als Spieler Lebenspunkte. Sie sollten demnach versuchen Ihre Türme so zu plazieren, dass die Gegner durch den
+Beschuss Ihrer Türme alle Lebenspunkte verlieren. Dies geschieht wenn der Gegner genügend male getroffen wird. Die Gegner
+sowie auch Ihre Türme haben dabei unterschiedliche Stärken und Schwächen welche auf eine der folgenden Seiten erläutert wird.
+Wenn ein Gegner all seine Lebenspunkte verliert bekommen Sie Münzen um sich für die nächste Welle an Gegnern zu wappnen.
+Wenn Sie alle Wellen an Gegner überstehen haben Sie gewonnen.

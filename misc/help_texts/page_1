@@ -1,0 +1,10 @@
+280,5
+Help_level_pick,800,448
+60,380
+#Das Level Auswahl Menü
+Hierhin gelangen Sie wenn sie im Hauptmenü den Button "Spiel starten" gedrückt haben. An dieser Stelle können Sie zwischen den vier Spielfeldern
+wählen, klicken Sie dazu einfach auf die gewünschte Nummer welche in der Abbildung rot markiert sind. Wenn Sie darauf geklickt haben lädt das
+gewählte Spielfeld und Sie können loslegen die Gegner davon abzuhalten zu Ihnen durchzudringen.
+
+#Zurück
+Der "Zurück" Button am unteren Bildschirmrand, in der Abbildung blau markiert, bringt Sie zurück ins Hauptmenü.

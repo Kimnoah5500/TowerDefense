@@ -15,8 +15,8 @@ class Text_box:
         Kim Matt
     """
 
-    def __init__(self, text: str, font: Font, pos: tuple, window_size: tuple, window: Surface, center: bool = False,
-                 bottom: bool = False):
+    def __init__(self, text: str, font: Font,  pos: tuple, window_size: tuple, window: Surface, center: bool = False,
+                 bottom: bool = False, heading_font=None):
         """Creates a text box at given position with given text.
 
         Args:
@@ -31,24 +31,20 @@ class Text_box:
         Author:
             Kim Matt
         """
-        self.text_size = font.get_height()
+        self.heading_font = heading_font
+        self.font = font
         if isinstance(text, str):
-            self.text_box = font.render(text, True, (255, 255, 255))
+            self.text = text
         elif isinstance(text, list):
-            self.text_box = []
+            self.text = []
             for line in text:
-                self.text_box.append(font.render(line, True, (255, 255, 255)))
+                self.text.append(line)
 
         self.window = window
+        self.window_size = window_size
         self.pos = pos
-        if center:
-            pos_list = list(self.pos)
-            pos_list[0] = window_size[0] // 2 - self.text_box.get_rect().width // 2
-            self.pos = tuple(pos_list)
-        elif bottom:
-            pos_list = list(self.pos)
-            pos_list[1] = window_size[1] - self.text_box.get_rect().height
-            self.pos = tuple(pos_list)
+        self.center = center
+        self.bottom = bottom
 
     def render(self):
         """Renders the text box.
@@ -56,10 +52,33 @@ class Text_box:
         Author:
             Kim Matt
         """
-        if isinstance(self.text_box, list):
-            line_index = 0
-            for line in self.text_box:
-                self.window.blit(line, (self.pos[0], self.pos[1] + line_index * self.text_size))
-                line_index += 1
+        if isinstance(self.text, list):
+            pos = self.pos
+            for line in self.text:
+                if not line:
+                    pos = list(pos)
+                    pos[1] += self.font.get_height()
+                    pos = tuple(pos)
+                elif line[0] == '#':
+                    self.window.blit(self.heading_font.render(line[1:], True, (255, 255, 255)), pos)
+                    pos = list(pos)
+                    pos[1] += self.heading_font.get_height()
+                    pos = tuple(pos)
+                else:
+                    self.window.blit(self.font.render(line, True, (255, 255, 255)), pos)
+                    pos = list(pos)
+                    pos[1] += self.font.get_height()
+                    pos = tuple(pos)
         else:
-            self.window.blit(self.text_box, self.pos)
+            text_box: Surface = self.font.render(self.text, True, (255, 255, 255))
+            if self.center:
+                pos_list = list(self.pos)
+                pos_list[0] = int(self.window_size[0] // 2 - text_box.get_rect().width // 2)
+                pos_list[1] = int(pos_list[1])
+                self.pos = tuple(pos_list)
+            elif self.bottom:
+                pos_list = list(self.pos)
+                pos_list[0] = int(pos_list[0])
+                pos_list[1] = int(self.window_size[1] - text_box.get_rect().height)
+                self.pos = tuple(pos_list)
+            self.window.blit(text_box, self.pos)
